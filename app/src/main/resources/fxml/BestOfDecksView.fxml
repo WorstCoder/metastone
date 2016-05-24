@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root type="BorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" styleClass="panel" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <bottom>
+    <AnchorPane>
+      <children>
+        <Button fx:id="backButton" mnemonicParsing="false" text="Back" AnchorPane.leftAnchor="0.0" />
+        <Button fx:id="startButton" mnemonicParsing="false" text="Start" AnchorPane.leftAnchor="380.0" AnchorPane.rightAnchor="380.0" />
+      </children>
+    </AnchorPane>
+  </bottom>
+  <center>
+    <VBox alignment="CENTER" fillWidth="false" maxHeight="600.0" maxWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <children>
+        <Label styleClass="name-small" text="Deck Format:" />
+        <ComboBox fx:id="formatBox" prefWidth="150.0" />
+        <HBox fx:id="decksArea" alignment="CENTER" blendMode="GREEN" maxHeight="600.0" maxWidth="600.0" />
+        <Label styleClass="name-small" text="Number of games" />
+        <ComboBox fx:id="numberOfGamesBox" prefWidth="150.0" />
+        <ComboBox fx:id="behaviourBox" prefWidth="150.0" />
+      </children>
+    </VBox>
+  </center>
+  <padding>
+    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+  </padding>
+  <top>
+    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="header" text="Best of decks" BorderPane.alignment="CENTER" />
+  </top>
+</fx:root>

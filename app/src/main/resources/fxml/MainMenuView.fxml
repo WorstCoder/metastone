@@ -19,6 +19,7 @@
             <Button fx:id="trainingModeButton" layoutX="422.0" layoutY="391.0" mnemonicParsing="false" prefWidth="200.0" styleClass="main-button" text="Training Mode" textAlignment="CENTER" />
             <Button fx:id="sandboxModeButton" layoutX="422.0" layoutY="417.0" mnemonicParsing="false" prefWidth="200.0" styleClass="main-button" text="Sandbox Mode" textAlignment="CENTER" />
             <Button fx:id="battleOfDecksButton" layoutX="422.0" layoutY="388.0" mnemonicParsing="false" prefWidth="200.0" styleClass="main-button" text="Battle of Decks" textAlignment="CENTER" />
+            <Button fx:id="bestOfDecks" layoutX="422.0" layoutY="388.0" mnemonicParsing="false" prefWidth="200.0" styleClass="main-button" text="Best of decks" textAlignment="CENTER" />
          </children></VBox>
    </center>
    <top>

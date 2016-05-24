@@ -12,6 +12,7 @@ import net.demilich.metastone.gui.playmode.config.PlayModeConfigMediator;
 import net.demilich.metastone.gui.sandboxmode.SandboxModeMediator;
 import net.demilich.metastone.gui.simulationmode.SimulationMediator;
 import net.demilich.metastone.gui.trainingmode.TrainingModeMediator;
+import net.demilich.metastone.gui.bestofdecks.BestOfDecksMediator;
 
 public class MainMenuMediator extends Mediator<GameNotification> {
 
@@ -45,6 +46,9 @@ public class MainMenuMediator extends Mediator<GameNotification> {
 		case BATTLE_OF_DECKS_SELECTED:
 			getFacade().registerMediator(new BattleOfDecksMediator());
 			break;
+		case BEST_OF_DECKS_SELECTED:
+			getFacade().registerMediator(new BestOfDecksMediator());
+			break;
 		default:
 			break;
 		}
@@ -59,7 +63,7 @@ public class MainMenuMediator extends Mediator<GameNotification> {
 		notificationInterests.add(GameNotification.SIMULATION_MODE_SELECTED);
 		notificationInterests.add(GameNotification.SANDBOX_MODE_SELECTED);
 		notificationInterests.add(GameNotification.TRAINING_MODE_SELECTED);
-		notificationInterests.add(GameNotification.BATTLE_OF_DECKS_SELECTED);
+		notificationInterests.add(GameNotification.BEST_OF_DECKS_SELECTED);
 		return notificationInterests;
 	}
 

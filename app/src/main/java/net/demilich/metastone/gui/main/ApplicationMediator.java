@@ -16,6 +16,7 @@ import net.demilich.metastone.gui.playmode.config.PlayModeConfigMediator;
 import net.demilich.metastone.gui.sandboxmode.SandboxModeMediator;
 import net.demilich.metastone.gui.simulationmode.SimulationMediator;
 import net.demilich.metastone.gui.trainingmode.TrainingModeMediator;
+import net.demilich.metastone.gui.bestofdecks.BestOfDecksMediator;
 
 public class ApplicationMediator extends Mediator<GameNotification> {
 
@@ -64,6 +65,7 @@ public class ApplicationMediator extends Mediator<GameNotification> {
 		getFacade().removeMediator(TrainingModeMediator.NAME);
 		getFacade().removeMediator(SandboxModeMediator.NAME);
 		getFacade().removeMediator(BattleOfDecksMediator.NAME);
+		getFacade().removeMediator(BestOfDecksMediator.NAME);
 	}
 
 }
