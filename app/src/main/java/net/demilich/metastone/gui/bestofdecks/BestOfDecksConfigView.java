@@ -94,6 +94,6 @@ public class BestOfDecksConfigView extends VBox {
         heroNameLabel.setText(hero.name());
     }
 
-    List<Deck> GetDecks(){return new DecksReader(url,5, hero).GetDecks();}
+    List<Deck> GetDecks(int numberOfDecks){return new DecksReader(url,numberOfDecks, hero).GetDecks();}
 
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,12 +13,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
-import javafx.scene.text.Text;
 import net.demilich.metastone.GameNotification;
 import net.demilich.metastone.NotificationProxy;
 import net.demilich.metastone.game.behaviour.GreedyOptimizeMove;
@@ -27,16 +22,10 @@ import net.demilich.metastone.game.behaviour.IBehaviour;
 import net.demilich.metastone.game.behaviour.NoAggressionBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.behaviour.heuristic.WeightedHeuristic;
-import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.behaviour.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.gui.common.BehaviourStringConverter;
-import net.demilich.metastone.gui.common.DeckFormatStringConverter;
-import net.demilich.metastone.game.gameconfig.GameConfig;
-import net.demilich.metastone.gui.gameconfig.PlayerConfigView;
-import net.demilich.metastone.gui.playmode.config.PlayerConfigType;
 
 public class BestOfDecksView extends BorderPane implements EventHandler<ActionEvent> {
 
@@ -50,6 +39,9 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
     protected ComboBox<Integer> numberOfGamesBox;
 
     @FXML
+    protected ComboBox<Integer> numberOfDecksBox;
+
+    @FXML
     protected ComboBox<IBehaviour> behaviourBox;
 
     @FXML
@@ -60,7 +52,7 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
     private List<DeckFormat> deckFormats;
 
     public BestOfDecksView() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/BestOfDecksView2.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/BestOfDecksViewNEW.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
@@ -86,6 +78,7 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
         startButton.setOnAction(this);
         backButton.setOnAction(this);
         setupNumberOfGamesBox();
+        setupNumberOfDecksBox();
 
     }
 
@@ -108,15 +101,14 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
     @Override
     public void handle(ActionEvent actionEvent) {
         if (actionEvent.getSource() == startButton) {
-            System.out.println(":D");
             for(Node node : decksTile.getChildren()){
                 BestOfDecksConfigView config = (BestOfDecksConfigView)node;
                 if(config.include.isSelected()){
-                    heroesDecks.addAll(config.GetDecks());
+                    heroesDecks.addAll(config.GetDecks(numberOfDecksBox.getSelectionModel().getSelectedItem()));
                 }
             }
-            DeckFormat df = deckFormats.get(0);
-            //StartSimulation(heroesDecks,1,df);
+            StartSimulation simulation = new StartSimulation(heroesDecks,numberOfGamesBox.getSelectionModel().getSelectedItem(),deckFormats.get(0),new GameStateValueBehaviour());
+            simulation.Simulation();
             //GameConfig gameConfig = new GameConfig();
             //gameConfig.setNumberOfGames(numberOfGamesBox.getSelectionModel().getSelectedItem());
             //gameConfig.setPlayerConfig1(player1Config.getPlayerConfig());
@@ -160,6 +152,18 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
         numberOfGamesEntries.add(32);
         numberOfGamesBox.setItems(numberOfGamesEntries);
         numberOfGamesBox.getSelectionModel().select(0);
+    }
+
+    private void setupNumberOfDecksBox() {
+        ObservableList<Integer> numberOfDecksEntries = FXCollections.observableArrayList();
+        numberOfDecksEntries.add(1);
+        numberOfDecksEntries.add(5);
+        numberOfDecksEntries.add(10);
+        numberOfDecksEntries.add(25);
+        numberOfDecksEntries.add(50);
+        numberOfDecksEntries.add(100);
+        numberOfDecksBox.setItems(numberOfDecksEntries);
+        numberOfDecksBox.getSelectionModel().select(0);
     }
 
 }
