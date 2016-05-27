@@ -47,11 +47,12 @@ public class StartSimulation {
     }
 
     public void Simulation(){
+        List<Deck> decks2 = decks;
         for(Deck deck1:decks) {
             playerConfig1.setDeck(deck1);
             SetHero(playerConfig1);
             player1 = new Player(playerConfig1);
-            for(Deck deck2:decks) {
+            for(Deck deck2:decks2) {
                 if(deck1==deck2) continue;
                 playerConfig2.setDeck(deck2);
                 SetHero(playerConfig2);
@@ -60,8 +61,11 @@ public class StartSimulation {
                     GameContext newGame = new GameContext(player1, player2, new GameLogic(), format);
                     newGame.play();
                     newGame.dispose();
+                    player1 = new Player(playerConfig1);
+                    player2 = new Player(playerConfig2);
                 }
             }
+            decks2.remove(0);
         }
     }
 
