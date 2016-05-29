@@ -16,6 +16,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.gui.deckbuilder.DeckFormatProxy;
 import net.demilich.metastone.gui.simulationmode.PlayerConfigView;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,7 @@ public class StartSimulation {
     private Player player1;
     private Player player2;
     private int nuberOfGames;
+    private List<BestOfResults> results= new ArrayList<>();
 
 
 
@@ -47,7 +49,7 @@ public class StartSimulation {
     }
 
     public void Simulation(){
-        List<Deck> decks2 = decks;
+        List<Deck> decks2 = new ArrayList<>(decks);
         for(Deck deck1:decks) {
             playerConfig1.setDeck(deck1);
             SetHero(playerConfig1);
@@ -60,6 +62,7 @@ public class StartSimulation {
                 for(int i=0;i<nuberOfGames;i++){
                     GameContext newGame = new GameContext(player1, player2, new GameLogic(), format);
                     newGame.play();
+                    results.add(new BestOfResults(newGame.getPlayer1(),newGame.getPlayer2(),newGame.getWinningPlayerId()));
                     newGame.dispose();
                     player1 = new Player(playerConfig1);
                     player2 = new Player(playerConfig2);
@@ -76,7 +79,10 @@ public class StartSimulation {
                 config.setHeroCard((HeroCard) card);
             }
         }
+    }
 
+    public List<BestOfResults> getResults(){
+        return results;
     }
 }
 

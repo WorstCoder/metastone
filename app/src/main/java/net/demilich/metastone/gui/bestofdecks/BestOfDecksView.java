@@ -3,6 +3,7 @@ package net.demilich.metastone.gui.bestofdecks;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,6 +51,7 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
     protected  List<Deck> heroesDecks = new ArrayList<>();
 
     private List<DeckFormat> deckFormats;
+    private Map calcStats;
 
     public BestOfDecksView() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/BestOfDecksViewNEW.fxml"));
@@ -109,12 +111,9 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
             }
             StartSimulation simulation = new StartSimulation(heroesDecks,numberOfGamesBox.getSelectionModel().getSelectedItem(),deckFormats.get(0),new GameStateValueBehaviour());
             simulation.Simulation();
-            //GameConfig gameConfig = new GameConfig();
-            //gameConfig.setNumberOfGames(numberOfGamesBox.getSelectionModel().getSelectedItem());
-            //gameConfig.setPlayerConfig1(player1Config.getPlayerConfig());
-            //gameConfig.setPlayerConfig2(player2Config.getPlayerConfig());
-            //gameConfig.setDeckFormat(formatBox.getValue());
-            //NotificationProxy.sendNotification(GameNotification.COMMIT_SIMULATIONMODE_CONFIG, gameConfig);
+            List<BestOfResults> simStats = simulation.getResults();
+
+            calcStats = new StatsCalc(simStats).getResults();
         } else if (actionEvent.getSource() == backButton) {
             NotificationProxy.sendNotification(GameNotification.MAIN_MENU);
         }

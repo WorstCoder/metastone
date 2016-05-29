@@ -3,6 +3,7 @@ package net.demilich.metastone.game.statistics;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
@@ -184,6 +185,10 @@ public class GameStatistics implements Cloneable {
 	private void updateWinRate() {
 		double winRate = getLong(Statistic.GAMES_WON) / (double) (getLong(Statistic.GAMES_WON) + getLong(Statistic.GAMES_LOST));
 		set(Statistic.WIN_RATE, winRate);
+	}
+
+	public Map<Statistic,Object> getStatsMap(){
+		return stats;
 	}
 
 }
