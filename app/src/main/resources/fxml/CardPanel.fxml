@@ -13,6 +13,6 @@
    <children>
       <Label styleClass="info-small" text="Cards:" />
       <Button fx:id="editHandButton" mnemonicParsing="false" text="Edit hand" />
-      <Button fx:id="editDeckButton" layoutX="10.0" layoutY="117.0" mnemonicParsing="false" text="Edit deck" />
+      <Button fx:id="editDeckButton" layoutX="10.0" layoutY="117.0" mnemonicParsing="false" text="Edit deckName" />
    </children>
 </fx:root>

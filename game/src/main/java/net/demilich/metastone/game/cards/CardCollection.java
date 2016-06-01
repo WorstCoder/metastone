@@ -25,6 +25,10 @@ public class CardCollection implements Iterable<Card>, Cloneable {
 			cards.add(card.clone());
 		}
 	}
+
+	public void addCardsList(List<Card> cardsList){
+		this.cards=cardsList;
+	}
 	
 	public void addRandomly(Card card) {
 		int index = ThreadLocalRandom.current().nextInt(cards.size() + 1);

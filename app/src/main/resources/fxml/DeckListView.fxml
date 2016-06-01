@@ -9,7 +9,7 @@
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="220.0" spacing="2.0" style="-fx-background-color: tan;" type="VBox" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="newDeckButton" graphicTextGap="8.0" mnemonicParsing="false" prefWidth="220.0" text="New deck">
+      <Button fx:id="newDeckButton" graphicTextGap="8.0" mnemonicParsing="false" prefWidth="220.0" text="New deckName">
          <font>
             <Font name="Arial" size="18.0" />
          </font>

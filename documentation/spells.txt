@@ -101,7 +101,7 @@ CopyCardSpell
 Puts a copy of a card into your hand.
 Examples: Mind Vision, Convert, Chromaggus
 "value": Number of copies to make
-"cardLocation": Where to find the source of the copy. "HAND" refers to the opponent's hand, "DECK" refers to the opponent's deck, and so on.
+"cardLocation": Where to find the source of the copy. "HAND" refers to the opponent's hand, "DECK" refers to the opponent's deckName, and so on.
 
 CopyDeathrattleSpell
 Copies the target’s Deathrattles.
@@ -132,7 +132,7 @@ Destroys the target.
 Examples: Sacrificial Pact, Big Game Hunter, Execute
 
 DiscardCardsFromDeckSpell {}: Combine with DiscardSpell (Use DeckLocation)
-Mills cards off the top of your deck. Works identically to overdraw.
+Mills cards off the top of your deckName. Works identically to overdraw.
 Examples: Fel Reaver
 "value": Number of cards to discard.
 
@@ -271,7 +271,7 @@ Examples: Echo of Medivh, Duplicate
 "howMany": Number of copies of each minion to put into your hand.
 
 PutMinionOnBoardSpell
-Puts minions fom your deck directly into the battlefield.
+Puts minions fom your deckName directly into the battlefield.
 Examples: Varian Wrynn
 
 PutRandomMinionOnBoardSpell
@@ -281,7 +281,7 @@ Examples: Voidcaller, Deathlord, Desert Camel
 "cardLocation": Where to find the card to play.
 
 PutRandomSecretIntoPlaySpell
-Puts the specified number of secrets directly from your deck into the battlefield.
+Puts the specified number of secrets directly from your deckName into the battlefield.
 Examples: Mysterious Challenger, Mad Scientist
 "howMany": Number of secrets to put into play.
 
@@ -360,7 +360,7 @@ Set the Hp of an Entity.
 Examples: Repentance, Equality, Keeper of Uldaman
 
 ShuffleMinionToDeckSpell
-Shuffles a minion into a players deck.
+Shuffles a minion into a players deckName.
 Examples: Malorne, Entomb, Recycle
 "target": Minion to shuffle.
 

@@ -112,7 +112,7 @@
       <URL value="@/css/deckbuilder.css" />
    </stylesheets>
    <bottom>
-      <Button fx:id="collectionButton" mnemonicParsing="false" styleClass="class-button" text="Create deck collection" BorderPane.alignment="CENTER">
+      <Button fx:id="collectionButton" mnemonicParsing="false" styleClass="class-button" text="Create deckName collection" BorderPane.alignment="CENTER">
          <graphic>
             <ImageView fitHeight="56.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                <image>

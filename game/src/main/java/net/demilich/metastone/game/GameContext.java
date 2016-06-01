@@ -78,9 +78,9 @@ public class GameContext implements Cloneable, IDisposable {
 	public GameContext clone() {
 		GameLogic logicClone = getLogic().clone();
 		Player player1Clone = getPlayer1().clone();
-		// player1Clone.getDeck().shuffle();
+		// player1Clone.getDeckName().shuffle();
 		Player player2Clone = getPlayer2().clone();
-		// player2Clone.getDeck().shuffle();
+		// player2Clone.getDeckName().shuffle();
 		GameContext clone = new GameContext(player1Clone, player2Clone, logicClone, deckFormat);
 		clone.triggerManager = triggerManager.clone();
 		clone.activePlayer = activePlayer;

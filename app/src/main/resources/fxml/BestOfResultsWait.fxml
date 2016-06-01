@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="300.0" styleClass="bordered-dialog" stylesheets="@../css/main.css" type="BorderPane" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1">
+  <center>
+    <VBox alignment="CENTER" prefHeight="516.0" prefWidth="797.0">
+      <children>
+        <Label fx:id="centerLabel" styleClass="name-big" text="..." textAlignment="CENTER" />
+      </children>
+    </VBox>
+  </center>
+  <padding>
+    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+  </padding>
+  <top>
+    <VBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="213.0">
+      <children>
+        <Label fx:id="topLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="name-big" text="Simulating" textAlignment="CENTER" />
+      </children>
+    </VBox>
+  </top>
+</fx:root>

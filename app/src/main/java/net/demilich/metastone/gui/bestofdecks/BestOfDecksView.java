@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.*;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,10 +24,13 @@ import net.demilich.metastone.game.behaviour.IBehaviour;
 import net.demilich.metastone.game.behaviour.NoAggressionBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.behaviour.heuristic.WeightedHeuristic;
+import net.demilich.metastone.game.behaviour.human.HumanBehaviour;
 import net.demilich.metastone.game.behaviour.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.gui.common.BehaviourStringConverter;
+import net.demilich.metastone.gui.playmode.config.PlayerConfigType;
 
 public class BestOfDecksView extends BorderPane implements EventHandler<ActionEvent> {
 
@@ -68,8 +72,8 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
         decksTile.setVgap(4);
         decksTile.setPrefColumns(4);
 
-        //behaviourBox.setConverter(new BehaviourStringConverter());
-        //setupBehaviours();
+        behaviourBox.setConverter(new BehaviourStringConverter());
+        setupBehaviours();
 
         for(HeroClass hero : HeroClass.values()){
             if(hero != HeroClass.ANY && hero != HeroClass.DECK_COLLECTION && hero!= HeroClass.OPPONENT && hero!= HeroClass.BOSS){
@@ -103,26 +107,27 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
     @Override
     public void handle(ActionEvent actionEvent) {
         if (actionEvent.getSource() == startButton) {
-            for(Node node : decksTile.getChildren()){
-                BestOfDecksConfigView config = (BestOfDecksConfigView)node;
-                if(config.include.isSelected()){
-                    heroesDecks.addAll(config.GetDecks(numberOfDecksBox.getSelectionModel().getSelectedItem()));
+            Thread th = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    NotificationProxy.sendNotification(GameNotification.BEST_OF_WAIT_SHOW);
+                    NotificationProxy.sendNotification(GameNotification.BEST_OF_WAIT_UPDATE_TOP,"Downloading Decks");
+                    getDecks();
+                    StartSimulation simulation = new StartSimulation(heroesDecks,numberOfGamesBox.getSelectionModel().getSelectedItem(),deckFormats.get(0),behaviourBox.getSelectionModel().getSelectedItem());
+                    simulation.Simulation();
+                    List<BestOfResults> simStats = simulation.getResults();
+                    calcStats = new StatsCalc(simStats).getResults();
+                    NotificationProxy.sendNotification(GameNotification.BEST_OF_GET_RESULTS,calcStats);
+                    NotificationProxy.sendNotification(GameNotification.BEST_OF_RESULTS);
                 }
-            }
-            StartSimulation simulation = new StartSimulation(heroesDecks,numberOfGamesBox.getSelectionModel().getSelectedItem(),deckFormats.get(0),new GameStateValueBehaviour());
-            simulation.Simulation();
-            List<BestOfResults> simStats = simulation.getResults();
+            });
+            th.setDaemon(true);
+            th.start();
 
-            calcStats = new StatsCalc(simStats).getResults();
         } else if (actionEvent.getSource() == backButton) {
             NotificationProxy.sendNotification(GameNotification.MAIN_MENU);
         }
     }
-
-    /*public void injectDecks(List<Deck> decks) {
-        player1Config.injectDecks(decks);
-        player2Config.injectDecks(decks);
-    }*/
 
     public void injectDeckFormats(List<DeckFormat> deckFormats) {
 		this.deckFormats = deckFormats;
@@ -156,13 +161,49 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
     private void setupNumberOfDecksBox() {
         ObservableList<Integer> numberOfDecksEntries = FXCollections.observableArrayList();
         numberOfDecksEntries.add(1);
+        numberOfDecksEntries.add(2);
         numberOfDecksEntries.add(5);
         numberOfDecksEntries.add(10);
         numberOfDecksEntries.add(25);
-        numberOfDecksEntries.add(50);
-        numberOfDecksEntries.add(100);
+        //numberOfDecksEntries.add(50);
+       // numberOfDecksEntries.add(100);
         numberOfDecksBox.setItems(numberOfDecksEntries);
         numberOfDecksBox.getSelectionModel().select(0);
+    }
+
+    private void getDecks(){
+        //Make threads pool
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread t = Executors.defaultThreadFactory().newThread(r);
+                t.setDaemon(true);
+                return t;
+            }
+        });
+        //Make list for all calls results
+        List<Future<List<Deck>>> futureDecks = new ArrayList<>();
+        for(Node node : decksTile.getChildren()){
+            BestOfDecksConfigView config = (BestOfDecksConfigView)node;
+            if(config.include.isSelected()){
+                //Make new reader callable
+                Callable<List<Deck>> readerCall = new DecksReader(config.getUrl(),config.getHero(), numberOfDecksBox.getSelectionModel().getSelectedItem());
+                //Execute reader
+                Future<List<Deck>> future = executor.submit(readerCall);
+                //Add executed reader to list, to make return accessible
+                futureDecks.add(future);
+            }
+        }
+        //Get all decks form future list
+        for(Future<List<Deck>> decks:futureDecks){
+            try {
+                heroesDecks.addAll(decks.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

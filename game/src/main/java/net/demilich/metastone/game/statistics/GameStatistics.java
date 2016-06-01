@@ -3,10 +3,11 @@ package net.demilich.metastone.game.statistics;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 
@@ -15,6 +16,10 @@ public class GameStatistics implements Cloneable {
 	private final Map<Statistic, Object> stats = new EnumMap<Statistic, Object>(Statistic.class);
 	private final Map<String, Integer> cardsPlayed = new HashMap<String, Integer>();
 	private final Map<String, Integer> minionsSummoned = new HashMap<String, Integer>();
+	private int gamesPlayed;
+	private String deckName;
+	private int id;
+	private HeroClass hero;
 
 	private void add(Statistic key, long value) {
 		if (!stats.containsKey(key)) {
@@ -182,13 +187,36 @@ public class GameStatistics implements Cloneable {
 		return builder.toString();
 	}
 
-	private void updateWinRate() {
+	public void updateWinRate() {
 		double winRate = getLong(Statistic.GAMES_WON) / (double) (getLong(Statistic.GAMES_WON) + getLong(Statistic.GAMES_LOST));
 		set(Statistic.WIN_RATE, winRate);
 	}
+
+	public void addGame() {gamesPlayed++;}
+
+	public int getGames() {return gamesPlayed;}
+
+	public void setHero(HeroClass hero) {this.hero=hero;}
+
+	public HeroClass getHero() {return hero;}
 
 	public Map<Statistic,Object> getStatsMap(){
 		return stats;
 	}
 
+	public String getDeckName() {
+		return deckName;
+	}
+
+	public void setDeckName(String deckName) {
+		this.deckName = deckName;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 }

@@ -76,15 +76,15 @@ public class BestOfDecksConfigView extends VBox {
         }
 
         switch (hero){
-            case DRUID: url="http://www.hearthpwn.com/decks?filter-deck-tag=1&filter-class=4"; break;
-            case HUNTER: url="http://www.hearthpwn.com/decks?filter-deck-tag=1&filter-class=8"; break;
-            case MAGE: url="http://www.hearthpwn.com/decks?filter-deck-tag=1&filter-class=16"; break;
-            case PALADIN: url="http://www.hearthpwn.com/decks?filter-deck-tag=1&filter-class=32"; break;
-            case PRIEST: url="http://www.hearthpwn.com/decks?filter-deck-tag=1&filter-class=64"; break;
-            case ROGUE: url="http://www.hearthpwn.com/decks?filter-deck-tag=1&filter-class=128"; break;
-            case SHAMAN: url="http://www.hearthpwn.com/decks?filter-deck-tag=1&filter-class=256"; break;
-            case WARLOCK: url="http://www.hearthpwn.com/decks?filter-deck-tag=1&filter-class=512"; break;
-            case WARRIOR: url="http://www.hearthpwn.com/decks?filter-deck-tag=1&filter-class=1024"; break;
+            case DRUID: url="http://www.hearthpwn.com/decks?filter-show-constructed-only=y&filter-deck-tag=1&filter-class=4"; break;
+            case HUNTER: url="http://www.hearthpwn.com/decks?filter-show-constructed-only=y&filter-deck-tag=1&filter-class=8"; break;
+            case MAGE: url="http://www.hearthpwn.com/decks?filter-show-constructed-only=y&filter-deck-tag=1&filter-class=16"; break;
+            case PALADIN: url="http://www.hearthpwn.com/decks?filter-show-constructed-only=y&filter-deck-tag=1&filter-class=32"; break;
+            case PRIEST: url="http://www.hearthpwn.com/decks?filter-show-constructed-only=y&filter-deck-tag=1&filter-class=64"; break;
+            case ROGUE: url="http://www.hearthpwn.com/decks?filter-show-constructed-only=y&filter-deck-tag=1&filter-class=128"; break;
+            case SHAMAN: url="http://www.hearthpwn.com/decks?filter-show-constructed-only=y&filter-deck-tag=1&filter-class=256"; break;
+            case WARLOCK: url="http://www.hearthpwn.com/decks?filter-show-constructed-only=y&filter-deck-tag=1&filter-class=512"; break;
+            case WARRIOR: url="http://www.hearthpwn.com/decks?filter-show-constructed-only=y&filter-deck-tag=1&filter-class=1024"; break;
             default: url="http://www.hearthpwn.com/decks"; break;
         }
 
@@ -94,6 +94,11 @@ public class BestOfDecksConfigView extends VBox {
         heroNameLabel.setText(hero.name());
     }
 
-    List<Deck> GetDecks(int numberOfDecks){return new DecksReader(url,numberOfDecks, hero).GetDecks();}
+    public String getUrl() {
+        return url;
+    }
 
+    public HeroClass getHero() {
+        return hero;
+    }
 }

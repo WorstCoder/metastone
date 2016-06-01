@@ -90,7 +90,7 @@
               </Label>
             </children>
           </VBox>
-	    <Label id="cards" fx:id="cardsLabel" alignment="CENTER" maxWidth="60.0" text="Cards in deck: 30" textAlignment="LEFT" wrapText="true">
+	    <Label id="cards" fx:id="cardsLabel" alignment="CENTER" maxWidth="60.0" text="Cards in deckName: 30" textAlignment="LEFT" wrapText="true">
           <font>
             <Font name="Arial Bold" size="12.0" />
           </font>

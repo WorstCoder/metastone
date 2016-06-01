@@ -38,7 +38,7 @@
    <center>
       <VBox alignment="CENTER" spacing="16.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" styleClass="default-label" text="Load an existing deck from the deck list to the right or create a new one" wrapText="true" VBox.vgrow="ALWAYS" />
+            <Label alignment="CENTER" contentDisplay="CENTER" styleClass="default-label" text="Load an existing deckName from the deckName list to the right or create a new one" wrapText="true" VBox.vgrow="ALWAYS" />
             <HBox alignment="CENTER" prefHeight="40.0" spacing="8.0" BorderPane.alignment="CENTER">
             <children>
                <Label id="#name-small" text="Or import from:" />

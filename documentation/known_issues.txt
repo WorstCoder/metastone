@@ -2,7 +2,7 @@ It is impossible to place a minion at the leftmost position when there are 6 min
 
 Clicking "Stop" when selecting a Battlecry in Sandbox Mode crashes the program.
 
-Feature Request: There is currently no way to go back when in the Deck Creation screen without saving the current deck.
+Feature Request: There is currently no way to go back when in the Deck Creation screen without saving the current deckName.
 
 Suggestions:
 Milled cards displayed somewhere

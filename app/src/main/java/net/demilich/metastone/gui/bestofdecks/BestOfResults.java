@@ -1,6 +1,7 @@
 package net.demilich.metastone.gui.bestofdecks;
 
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 /**
  * Created by X on 27.05.2016.
