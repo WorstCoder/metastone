@@ -119,6 +119,7 @@ public class BestOfDecksView extends BorderPane implements EventHandler<ActionEv
                     calcStats = new StatsCalc(simStats).getResults();
                     NotificationProxy.sendNotification(GameNotification.BEST_OF_GET_RESULTS,calcStats);
                     NotificationProxy.sendNotification(GameNotification.BEST_OF_RESULTS);
+                    heroesDecks.clear();
                 }
             });
             th.setDaemon(true);

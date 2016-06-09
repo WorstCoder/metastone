@@ -3,6 +3,7 @@ package net.demilich.metastone.gui.mainmenu;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.demilich.metastone.gui.synergies.SynergiesMediator;
 import net.demilich.nittygrittymvc.Mediator;
 import net.demilich.nittygrittymvc.interfaces.INotification;
 import net.demilich.metastone.GameNotification;
@@ -49,6 +50,9 @@ public class MainMenuMediator extends Mediator<GameNotification> {
 		case BEST_OF_DECKS_SELECTED:
 			getFacade().registerMediator(new BestOfDecksMediator());
 			break;
+		case SYNERGIES_SELECTED:
+			getFacade().registerMediator(new SynergiesMediator());
+			break;
 		default:
 			break;
 		}
@@ -64,6 +68,7 @@ public class MainMenuMediator extends Mediator<GameNotification> {
 		notificationInterests.add(GameNotification.SANDBOX_MODE_SELECTED);
 		notificationInterests.add(GameNotification.TRAINING_MODE_SELECTED);
 		notificationInterests.add(GameNotification.BEST_OF_DECKS_SELECTED);
+		notificationInterests.add(GameNotification.SYNERGIES_SELECTED);
 		return notificationInterests;
 	}
 

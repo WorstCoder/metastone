@@ -18,7 +18,7 @@ package net.demilich.metastone.gui.bestofdecks;
 
 public class BestOfDecksMediator extends Mediator<GameNotification> {
 
-    public static final String NAME = "BestOfDecksMediator";
+    public static final String NAME = "SynergiesMediator";
 
     private static Logger logger = LoggerFactory.getLogger(BestOfDecksMediator.class);
 

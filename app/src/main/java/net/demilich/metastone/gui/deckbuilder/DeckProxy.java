@@ -285,7 +285,7 @@ public class DeckProxy extends Proxy<GameNotification> {
 		activeDeck = null;
 	}
 
-	private void saveToJson(Deck deck) {
+	public void saveToJson(Deck deck) {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		HashMap<String, Object> saveData = new HashMap<String, Object>();
 		saveData.put("name", deck.getName());

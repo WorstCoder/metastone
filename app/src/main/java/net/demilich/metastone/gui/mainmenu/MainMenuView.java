@@ -43,6 +43,9 @@ public class MainMenuView extends BorderPane {
 	@FXML
 	private Button bestOfDecks;
 
+	@FXML
+	private Button synergies;
+
 
 	public MainMenuView() {
 
@@ -71,11 +74,12 @@ public class MainMenuView extends BorderPane {
 				.setOnAction(event -> NotificationProxy.sendNotification(GameNotification.BATTLE_OF_DECKS_SELECTED));
 
 		bestOfDecks.setOnAction(event -> NotificationProxy.sendNotification(GameNotification.BEST_OF_DECKS_SELECTED));
+		synergies.setOnAction(event -> NotificationProxy.sendNotification(GameNotification.SYNERGIES_SELECTED));
 
 		if (!BuildConfig.DEV_BUILD) {
 			trainingModeButton.setVisible(false);
 			trainingModeButton.setManaged(false);
-			battleOfDecksButton.setVisible(false);
+            battleOfDecksButton.setVisible(false);
 			battleOfDecksButton.setManaged(false);
 		}
 

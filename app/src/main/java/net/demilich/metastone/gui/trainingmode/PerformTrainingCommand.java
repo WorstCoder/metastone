@@ -1,5 +1,8 @@
 package net.demilich.metastone.gui.trainingmode;
 
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.HeroCard;
 import net.demilich.metastone.trainingmode.TrainingData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,8 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.statistics.Statistic;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
+
+import java.util.Set;
 
 public class PerformTrainingCommand extends SimpleCommand<GameNotification> {
 
@@ -52,11 +57,13 @@ public class PerformTrainingCommand extends SimpleCommand<GameNotification> {
 
 					PlayerConfig learnerConfig = new PlayerConfig(config.getDeckToTrain(),
 							new GameStateValueBehaviour(fittest, "(fittest)"));
+                    SetHero(learnerConfig);
 					learnerConfig.setName("Learner");
 					Player player1 = new Player(learnerConfig);
 
 					PlayerConfig opponentConfig = new PlayerConfig(config.getRandomDeck(), new GameStateValueBehaviour());
 					opponentConfig.setName("Opponent");
+                    SetHero(opponentConfig);
 					Player player2 = new Player(opponentConfig);
 					
 					DeckFormat deckFormat = new DeckFormat();
@@ -98,6 +105,16 @@ public class PerformTrainingCommand extends SimpleCommand<GameNotification> {
 		TrainingProgressReport progress = new TrainingProgressReport(gamesCompleted, config.getNumberOfGames(), gamesWon);
 		Notification<GameNotification> updateNotification = new Notification<>(GameNotification.TRAINING_PROGRESS_UPDATE, progress);
 		getFacade().notifyObservers(updateNotification);
+	}
+
+	private void SetHero(PlayerConfig config){
+		if(config.getHeroCard() == null || config.getDeck().getHeroClass().toString() != config.getHeroCard().getClassRestriction().name()) {
+			for (Card card : CardCatalogue.getHeroes()) {
+				if (config.getDeck().getHeroClass().toString() == card.getClassRestriction().name()) {
+					config.setHeroCard((HeroCard) card);
+				}
+			}
+		}
 	}
 
 }

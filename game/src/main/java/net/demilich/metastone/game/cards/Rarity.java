@@ -5,14 +5,15 @@ public enum Rarity {
 	COMMON,
 	RARE,
 	EPIC,
-	LEGENDARY;
+	LEGENDARY,
+	ANY;
 	
 	public boolean isRarity(Rarity rarity) {
 		if (this == FREE && rarity == COMMON) {
 			return true;
 		} else if (this == rarity) {
 			return true;
-		}
+		} else if (rarity == ANY) {return true;}
 		return false;
 	}
 

@@ -17,5 +17,4 @@ public class RandomValueProvider extends ValueProvider {
 		int diff = max - min;
 		return min + context.getLogic().random(diff + 1);
 	}
-
 }

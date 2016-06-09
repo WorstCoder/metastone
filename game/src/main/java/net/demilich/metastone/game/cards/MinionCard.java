@@ -12,6 +12,7 @@ import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
+import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class MinionCard extends Card {
 

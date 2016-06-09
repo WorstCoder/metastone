@@ -15,6 +15,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.gui.deckbuilder.DeckProxy;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -30,6 +31,7 @@ public class DecksReader implements Callable<List<Deck>> {
     private AtomicInteger decksReaded = new AtomicInteger(0);
 
     private HeroClass hero;
+    private DeckProxy proxy = new DeckProxy();
 
     public DecksReader(String url, HeroClass hero, int decksNum){
         this.url=url;
@@ -38,6 +40,7 @@ public class DecksReader implements Callable<List<Deck>> {
     }
 
     public List<Deck> call() throws Exception {
+        proxy.loadDecks();
         List<Deck> decks = Collections.synchronizedList(new ArrayList<>());
             doc = Jsoup.connect(url).userAgent("Mozilla").get();
             Elements urlDecks = doc.getElementsByAttributeValue("class", "tip");
@@ -57,6 +60,8 @@ public class DecksReader implements Callable<List<Deck>> {
                     public void run() {
                         Element element = urlDecks.get(finalI);
                         String name = element.children().text();
+                        Deck d = proxy.getDeckByName(name);
+                        if(d!=null){ decks.add(d); latch.countDown(); return;}
                         String innerDeckUrl = element.getElementsByTag("a").attr("href");
 
                         Deck deck = new Deck(hero);
@@ -101,9 +106,11 @@ public class DecksReader implements Callable<List<Deck>> {
                         }
                         deck.getCards().addCardsList(cardsCollection);
                         decks.add(deck);
+                        proxy.saveToJson(deck);
                         latch.countDown();
                     }
                 });
+
             }
             latch.await();
             executor.shutdown();

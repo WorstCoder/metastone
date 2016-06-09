@@ -99,7 +99,6 @@ public class StartSimulation {
                                             times.add((double)((System.currentTimeMillis() - runTime)/1000));
                                             NotificationProxy.sendNotification(GameNotification.BEST_OF_WAIT_UPDATE,
                                                     gamesCounter.addAndGet(1) + "/" + gamesTotal + " Done" + "\n" + player1P3.getDeckName() +"\n VS. \n" + player2P3.getDeckName());
-
                                             p3Counter.countDown();
                                         }
                                     });
