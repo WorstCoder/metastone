@@ -55,8 +55,8 @@ public class SynergiesView extends BorderPane implements EventHandler<ActionEven
     @Override
     public void handle(ActionEvent actionEvent) {
         if(actionEvent.getSource() == startButton){
-            empty = new GameMaker(deckFormats.get(0), HeroClass.WARLOCK, ContextTypes.EMPTY).getGame();
-            enemyDummies = new GameMaker(deckFormats.get(0), HeroClass.WARLOCK, HeroClass.SHAMAN, ContextTypes.ENEMY_DUMMIES).getGame();
+            SynergiesMaker warlock = new SynergiesMaker(deckFormats.get(0),HeroClass.WARLOCK);
+            warlock.start();
         }
         else if (actionEvent.getSource() == backButton) {
             NotificationProxy.sendNotification(GameNotification.MAIN_MENU);

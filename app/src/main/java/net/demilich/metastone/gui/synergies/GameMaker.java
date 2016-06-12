@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GameMaker {
 
@@ -34,8 +35,6 @@ public class GameMaker {
 
     private CardCollection dummiesCollection = new CardCollection();
 
-    private CardCollection cards;
-
     private PlayerConfig playerConfig1 = new PlayerConfig();
 
     private PlayerConfig playerConfig2 = new PlayerConfig();
@@ -44,22 +43,17 @@ public class GameMaker {
 
     private Player player2;
 
-    private ContextTypes type;
-
-    public GameMaker(DeckFormat format, HeroClass hero, HeroClass enemyHero, ContextTypes type){
+    public GameMaker(DeckFormat format, HeroClass hero, HeroClass enemyHero){
         this.deckFormat = format;
         this.heroClass = hero;
         this.enemyClass = enemyHero;
-        this.type=type;
         MakeDummies();
         SetupPlayers();
-        SetupCards();
         SetupGames();
     }
 
-    public GameMaker(DeckFormat format, HeroClass hero, ContextTypes type){
-        this(format,hero,HeroClass.MAGE,type);
-
+    public GameMaker(DeckFormat format, HeroClass hero){
+        this(format,hero,HeroClass.MAGE);
     }
 
     private void MakeDummies(){
@@ -70,6 +64,7 @@ public class GameMaker {
             dummyDesc.baseHp = i;
             dummyDesc.baseManaCost = i;
             dummyDesc.name="Dummy " + i;
+            dummyDesc.type = CardType.MINION;
             //if(j<8 && j!=2) {dummyDesc.race=Race.values()[j++];
             //dummyDesc.name="Dummy " + i +" - " + dummyDesc.race.toString();} else j++;
             dummies.add(new MinionCard(dummyDesc));
@@ -100,21 +95,10 @@ public class GameMaker {
         player2 = new Player(playerConfig2);
     }
 
-    private void SetupCards(){
-        cards = CardCatalogue.query(deckFormat,heroClass);
-        cards.addAll(CardCatalogue.query(deckFormat,HeroClass.ANY));
+    private void SetupGames(){
+        game = new SynergyGameContext(player1,player2,new SynergyGameLogic(), deckFormat);
     }
 
-    private void SetupGames(){
-        game = new GameContext(player1,player2,new GameLogic(), deckFormat);
-        if(type==ContextTypes.EMPTY){return;}
-        if(type==ContextTypes.ENEMY_DUMMIES){
-            for(int i=0;i<5;i++){
-                if (i==1) i++;
-                game.getLogic().summon(1,new Minion((MinionCard) dummies.get(i)));
-            }
-        }
-    }
 
     private void SetHero(PlayerConfig config){
         if(config.getHeroCard() == null || config.getDeck().getHeroClass().toString() != config.getHeroCard().getClassRestriction().name()) {
@@ -127,4 +111,6 @@ public class GameMaker {
     }
 
     public GameContext getGame(){return game;}
+
+    public List<Card> getDummies(){return dummies;}
 }
