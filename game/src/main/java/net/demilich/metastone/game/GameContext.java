@@ -45,10 +45,10 @@ public class GameContext implements Cloneable, IDisposable {
 	protected int activePlayer = -1;
 	private Player winner;
 	private MatchResult result;
-	private TurnState turnState = TurnState.TURN_ENDED;
+	protected TurnState turnState = TurnState.TURN_ENDED;
 
-	private int turn;
-	private int actionsThisTurn;
+	protected int turn;
+	protected int actionsThisTurn;
 
 	private boolean ignoreEvents;
 

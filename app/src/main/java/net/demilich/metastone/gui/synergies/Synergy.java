@@ -4,6 +4,8 @@ public class Synergy {
 
     private int totalCost;
 
+    private int manaGained;
+
 
     private int damage;
 
@@ -21,6 +23,8 @@ public class Synergy {
     private int enemyMinionsDestroyed;
 
     private int minionsSummoned;
+
+    private int friendlyMinionsDestroyed;
 
 
     private int totalMinionsAttack;
@@ -184,5 +188,21 @@ public class Synergy {
 
     public void setHeroDamageTaken(int heroDamageTaken) {
         this.heroDamageTaken = heroDamageTaken;
+    }
+
+    public int getManaGained() {
+        return manaGained;
+    }
+
+    public void setManaGained(int manaGained) {
+        this.manaGained = manaGained;
+    }
+
+    public int getFriendlyMinionsDestroyed() {
+        return friendlyMinionsDestroyed;
+    }
+
+    public void setFriendlyMinionsDestroyed(int friendlyMinionsDestroyed) {
+        this.friendlyMinionsDestroyed = friendlyMinionsDestroyed;
     }
 }

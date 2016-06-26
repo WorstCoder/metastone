@@ -3,6 +3,8 @@ package net.demilich.metastone.gui.synergies;
 import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
+import net.demilich.metastone.game.behaviour.GreedyOptimizeMove;
 import net.demilich.metastone.game.behaviour.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
@@ -84,7 +86,7 @@ public class GameMaker {
 
     private void SetupPlayers(){
         playerConfig1.setBehaviour(new GameStateValueBehaviour());
-        playerConfig2.setBehaviour(new GameStateValueBehaviour());
+        playerConfig2.setBehaviour(new DoNothingBehaviour());
         playerConfig1.setDeck(DummyDeck(heroClass));
         playerConfig2.setDeck(DummyDeck(enemyClass));
         playerConfig1.setName("P1");
