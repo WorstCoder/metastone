@@ -272,6 +272,7 @@ public class GameLogic implements Cloneable {
 				if (targetOverride != null && targetOverride.getId() != IdFactory.UNASSIGNED) {
 					targets.remove(0);
 					targets.add(targetOverride);
+					spellDesc = spellDesc.addArg(SpellArg.FILTER, null);
 					log("Target for spell {} has been changed! New target {}", spellCard, targets.get(0));
 				}
 			}
@@ -625,6 +626,7 @@ public class GameLogic implements Cloneable {
 		if (weapon.getCardCostModifier() != null) {
 			addManaModifier(player, weapon.getCardCostModifier(), weapon);
 		}
+		checkForDeadEntities();
 		context.fireGameEvent(new WeaponEquippedEvent(context, weapon));
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
@@ -1466,7 +1468,6 @@ public class GameLogic implements Cloneable {
 		} else {
 			performGameAction(playerId, battlecryAction);
 		}
-		checkForDeadEntities();
 	}
 
 	public void resolveDeathrattles(Player player, Actor actor) {
@@ -1612,6 +1613,7 @@ public class GameLogic implements Cloneable {
 
 		if (resolveBattlecry && minion.getBattlecry() != null && !minion.getBattlecry().isResolvedLate()) {
 			resolveBattlecry(player.getId(), minion);
+			checkForDeadEntities();
 		}
 
 		if (context.getEnvironment().get(Environment.TRANSFORM_REFERENCE) != null) {
@@ -1619,6 +1621,8 @@ public class GameLogic implements Cloneable {
 			minion.setBattlecry(null);
 			context.getEnvironment().remove(Environment.TRANSFORM_REFERENCE);
 		}
+
+		context.fireGameEvent(new BoardChangedEvent(context));
 
 		player.getStatistics().minionSummoned(minion);
 		SummonEvent summonEvent = new SummonEvent(context, minion, source);
@@ -1637,6 +1641,7 @@ public class GameLogic implements Cloneable {
 
 		if (resolveBattlecry && minion.getBattlecry() != null && minion.getBattlecry().isResolvedLate()) {
 			resolveBattlecry(player.getId(), minion);
+			checkForDeadEntities();
 		}
 
 		handleEnrage(minion);

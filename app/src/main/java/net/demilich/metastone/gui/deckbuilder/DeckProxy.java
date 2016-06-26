@@ -1,11 +1,8 @@
 package net.demilich.metastone.gui.deckbuilder;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URISyntaxException;
@@ -18,11 +15,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import net.demilich.metastone.BuildConfig;
+import net.demilich.metastone.utils.MetastoneProperties;
 import net.demilich.metastone.utils.ResourceInputStream;
 import net.demilich.metastone.utils.ResourceLoader;
+import net.demilich.metastone.utils.UserHomeMetastone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +46,7 @@ public class DeckProxy extends Proxy<GameNotification> {
 
 	public static final String NAME = "DeckProxy";
 	private static final String DECKS_FOLDER = "decks";
+	private static final String DECKS_FOLDER_PATH = UserHomeMetastone.getPath() + File.separator + DECKS_FOLDER;
 	private static final String DECKS_COPIED_PROPERTY = "decks.copied";
 
 	private final List<Deck> decks = new ArrayList<Deck>();
@@ -57,11 +55,16 @@ public class DeckProxy extends Proxy<GameNotification> {
 
 	public DeckProxy() {
 		super(NAME);
-		// ensure user's personal deck dir exists
 		try {
-			Files.createDirectories(Paths.get(BuildConfig.USER_HOME_METASTONE + File.separator + DECKS_FOLDER));
+			// ensure user's personal deck dir exists
+			Files.createDirectories(Paths.get(DECKS_FOLDER_PATH));
+			// ensure decks have been copied to ~/metastone/decks
+			copyDecksFromResources();
 		} catch (IOException e) {
-			logger.error("Trouble creating", Paths.get(BuildConfig.USER_HOME_METASTONE + File.separator + DECKS_FOLDER));
+			logger.error("Trouble creating " + Paths.get(DECKS_FOLDER_PATH));
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -111,7 +114,7 @@ public class DeckProxy extends Proxy<GameNotification> {
 	public void deleteDeck(Deck deck) {
 		decks.remove(deck);
 		logger.debug("Trying to delete deck '{}' contained in file '{}'...", deck.getName(), deck.getFilename());
-		Path path = Paths.get(BuildConfig.USER_HOME_METASTONE + File.separator + DECKS_FOLDER + File.separator + deck.getFilename());
+		Path path = Paths.get(DECKS_FOLDER_PATH + File.separator + deck.getFilename());
 		try {
 		    Files.delete(path);
 		} catch (NoSuchFileException x) {
@@ -130,65 +133,23 @@ public class DeckProxy extends Proxy<GameNotification> {
 	public void loadDecks() throws IOException, URISyntaxException {
 		decks.clear();
 
-		// ensure that decks have been copied into the USER_HOME_METASTONE/decks folder
-		copyDecksFromJar();
-
 		// load decks from ~/metastone/decks on the filesystem
-		if (Paths.get(BuildConfig.USER_HOME_METASTONE + File.separator + DECKS_FOLDER).toFile().exists()) {
-			loadStandardDecks(ResourceLoader.loadJsonInputStreams(BuildConfig.USER_HOME_METASTONE + File.separator + DECKS_FOLDER, true),
-					new GsonBuilder().setPrettyPrinting().create());
+		loadStandardDecks(ResourceLoader.loadJsonInputStreams(DECKS_FOLDER_PATH, true),
+				new GsonBuilder().setPrettyPrinting().create());
 
-			loadMetaDecks(ResourceLoader.loadJsonInputStreams(BuildConfig.USER_HOME_METASTONE + File.separator + DECKS_FOLDER, true),
-					new GsonBuilder().setPrettyPrinting().create());
-		}
+		loadMetaDecks(ResourceLoader.loadJsonInputStreams(DECKS_FOLDER_PATH, true),
+				new GsonBuilder().setPrettyPrinting().create());
 	}
 
-	private void copyDecksFromJar() throws IOException, URISyntaxException {
-		Properties prop = new Properties();
-		InputStream input = null;
-		FileOutputStream output = null;
-		String propertiesFilePath = BuildConfig.USER_HOME_METASTONE + File.separator + "metastone.properties";
-		try {
-			File propertiesFile = new File(propertiesFilePath);
-			if (!propertiesFile.exists()) {
-				propertiesFile.createNewFile();
-			}
+	private void copyDecksFromResources() throws IOException, URISyntaxException {
+		// if we have not copied decks to the USER_HOME_METASTONE decks folder, then do so now
+		if (!MetastoneProperties.getBoolean(DECKS_COPIED_PROPERTY)) {
+			ResourceLoader.copyFromResources(DECKS_FOLDER, DECKS_FOLDER_PATH);
 
-			input = new FileInputStream(propertiesFile);
-			// load a properties file
-			prop.load(input);
-
-			// if we have not copied decks to the USER_HOME_METASTONE decks folder, then do so now
-			if (!Boolean.parseBoolean(prop.getProperty(DECKS_COPIED_PROPERTY))) {
-				ResourceLoader.copyFromResources(DECKS_FOLDER, BuildConfig.USER_HOME_METASTONE + File.separator + DECKS_FOLDER);
-
-				output = new FileOutputStream(propertiesFile);
-				// set a property to indicate that we have copied decks
-				prop.setProperty(DECKS_COPIED_PROPERTY, Boolean.TRUE.toString());
-				// write properties file
-				prop.store(output, null);
-			}
-
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (output != null) {
-				try {
-					output.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
+			// set a property to indicate that we have copied decks
+			MetastoneProperties.setBoolean(DECKS_COPIED_PROPERTY, true);
 		}
 	}
-
 
 	private void loadMetaDecks(Collection<ResourceInputStream> inputStreams, Gson gson) throws IOException {
 		for (ResourceInputStream resourceInputStream : inputStreams) {
@@ -312,7 +273,7 @@ public class DeckProxy extends Proxy<GameNotification> {
 			String filename = deck.getName().toLowerCase();
 			filename = filename.replaceAll(" ", "_");
 			filename = filename.replaceAll("\\W+", "");
-			filename = BuildConfig.USER_HOME_METASTONE + File.separator + DECKS_FOLDER + File.separator + filename + ".json";
+			filename = DECKS_FOLDER_PATH + File.separator + filename + ".json";
 			Path path = Paths.get(filename);
 			Files.write(path, jsonData.getBytes());
 			deck.setFilename(path.getFileName().toString());

@@ -1,29 +1,31 @@
 package net.demilich.metastone.game.cards;
 
-import java.nio.file.Paths;
-import java.util.function.Predicate;
-
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
-import net.demilich.metastone.BuildConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.demilich.metastone.game.Attribute;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.utils.ResourceLoader;
+import net.demilich.metastone.utils.MetastoneProperties;
 import net.demilich.metastone.utils.ResourceInputStream;
+import net.demilich.metastone.utils.ResourceLoader;
+import net.demilich.metastone.utils.UserHomeMetastone;
 
 public class CardCatalogue {
 
 	private final static CardCollection cards = new CardCollection();
-	private static final String CARDS_FOLDER = "cards";
+	public static final String CARDS_FOLDER = "cards";
+	public static final String CARDS_FOLDER_PATH = UserHomeMetastone.getPath() + File.separator + CARDS_FOLDER;
+	private static final String CARDS_COPIED_PROPERTY = "cards.copied";
 	private static Logger logger = LoggerFactory.getLogger(CardCatalogue.class);
 
 	public static void add(Card card) {
@@ -59,13 +61,13 @@ public class CardCatalogue {
 	}
 
 	public static CardCollection getHeroes() {
-		return query(card -> card.isCollectible() && card.getCardType() == CardType.HERO);
+		return query(null, card -> card.isCollectible() && card.getCardType() == CardType.HERO);
 	}
-	
-	public static CardCollection getHeroPowers() {
-		return query(card -> card.isCollectible() && card.getCardType() == CardType.HERO_POWER);
+
+	public static CardCollection getHeroPowers(DeckFormat deckFormat) {
+		return query(deckFormat, card -> card.isCollectible() && card.getCardType() == CardType.HERO_POWER);
 	}
-	
+
 	public static CardCollection query(DeckFormat deckFormat) {
 		return query(deckFormat, (CardType) null, (Rarity) null, (HeroClass) null, (Attribute) null);
 	}
@@ -113,9 +115,12 @@ public class CardCatalogue {
 		return result;
 	}
 
-	public static CardCollection query(Predicate<Card> filter) {
+	public static CardCollection query(DeckFormat deckFormat, Predicate<Card> filter) {
 		CardCollection result = new CardCollection();
 		for (Card card : cards) {
+			if (deckFormat != null && !deckFormat.inSet(card)) {
+				continue;
+			}
 			if (filter.test(card)) {
 				result.add(card);
 			}
@@ -125,13 +130,8 @@ public class CardCatalogue {
 
 	public static void loadCards() throws IOException, URISyntaxException {
 
-		// load cards from cards.jar on the classpath
-		Collection<ResourceInputStream> inputStreams = ResourceLoader.loadJsonInputStreams(CARDS_FOLDER, false);
-
-		// load cards from ~/metastone/cards on the filesystem
-		if (Paths.get(BuildConfig.USER_HOME_METASTONE + CARDS_FOLDER).toFile().exists()) {
-			inputStreams.addAll((ResourceLoader.loadJsonInputStreams(BuildConfig.USER_HOME_METASTONE + CARDS_FOLDER, true)));
-		}
+		// load cards from ~/metastone/cards on the file system
+		Collection<ResourceInputStream> inputStreams = ResourceLoader.loadJsonInputStreams(CARDS_FOLDER_PATH, true);
 
 		Map<String, CardDesc> cardDesc = new HashMap<String, CardDesc>();
 		CardParser cardParser = new CardParser();
@@ -152,6 +152,17 @@ public class CardCatalogue {
 			Card instance = desc.createInstance();
 			CardCatalogue.add(instance);
 			logger.debug("Adding {} to CardCatalogue", instance);
+		}
+	}
+
+	public static void copyCardsFromResources() throws IOException, URISyntaxException {
+		// if we have not copied cards to the USER_HOME_METASTONE cards folder,
+		// then do so now
+		if (!MetastoneProperties.getBoolean(CARDS_COPIED_PROPERTY)) {
+			ResourceLoader.copyFromResources(CARDS_FOLDER, CARDS_FOLDER_PATH);
+
+			// set a property to indicate that we have copied the cards
+			MetastoneProperties.setBoolean(CARDS_COPIED_PROPERTY, true);
 		}
 	}
 }
