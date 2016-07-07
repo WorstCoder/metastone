@@ -28,8 +28,10 @@ public abstract class Card extends Entity {
 	private BattlecryDesc battlecry;
 	private ValueProvider manaCostModifier;
 	private final String cardId;
+	public CardDesc desc;
 
 	public Card(CardDesc desc) {
+		this.desc=desc;
 		cardId = desc.id;
 		setName(desc.name);
 		setDescription(desc.description);

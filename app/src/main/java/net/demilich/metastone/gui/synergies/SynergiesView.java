@@ -55,8 +55,9 @@ public class SynergiesView extends BorderPane implements EventHandler<ActionEven
     @Override
     public void handle(ActionEvent actionEvent) {
         if(actionEvent.getSource() == startButton){
-            SynergiesMaker warlock = new SynergiesMaker(deckFormats.get(0),HeroClass.WARLOCK);
-            warlock.start();
+            //SynergiesMaker warlock = new SynergiesMaker(deckFormats.get(0),HeroClass.WARLOCK);
+            //warlock.start();
+            GetRandomSpells rs = new GetRandomSpells();
         }
         else if (actionEvent.getSource() == backButton) {
             NotificationProxy.sendNotification(GameNotification.MAIN_MENU);

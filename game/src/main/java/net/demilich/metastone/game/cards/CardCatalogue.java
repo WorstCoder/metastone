@@ -60,6 +60,16 @@ public class CardCatalogue {
 		return null;
 	}
 
+	public static Card getEveryCardByName(String name) {
+		for (Card card : cards) {
+			if (card.getName().toLowerCase().equals(name.toLowerCase())) {
+				return card.clone();
+			}
+		}
+
+		return null;
+	}
+
 	public static CardCollection getHeroes() {
 		return query(null, card -> card.isCollectible() && card.getCardType() == CardType.HERO);
 	}
