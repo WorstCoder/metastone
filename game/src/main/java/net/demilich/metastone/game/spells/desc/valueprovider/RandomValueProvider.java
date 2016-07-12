@@ -17,4 +17,12 @@ public class RandomValueProvider extends ValueProvider {
 		int diff = max - min;
 		return min + context.getLogic().random(diff + 1);
 	}
+
+	public int getMin(){
+		return desc.getInt(ValueProviderArg.MIN);
+	}
+
+	public int getMax(){
+		return desc.getInt(ValueProviderArg.MAX);
+	}
 }

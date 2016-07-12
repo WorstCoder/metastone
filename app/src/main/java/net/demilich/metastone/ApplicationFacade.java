@@ -57,7 +57,7 @@ public class ApplicationFacade extends Facade<GameNotification> {
 		registerCommand(GameNotification.START_TRAINING, new PerformTrainingCommand());
 		registerCommand(GameNotification.COMMIT_BATTLE_OF_DECKS_CONFIG, new StartBattleOfDecksCommand());
 		
-		registerCommand(GameNotification.CHECK_FOR_UPDATE, new CheckForUpdateCommand());
+		//registerCommand(GameNotification.CHECK_FOR_UPDATE, new CheckForUpdateCommand());
 
 		registerCommand(GameNotification.SET_ACTIVE_DECK, new SetActiveDeckCommand());
 		registerCommand(GameNotification.ADD_CARD_TO_DECK, new AddCardToDeckCommand());

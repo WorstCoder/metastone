@@ -1,23 +1,18 @@
 package net.demilich.metastone.gui.synergies;
 
-import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.TurnState;
-import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.gameconfig.PlayerConfig;
-import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.RandomChancesSpells.SynergyGameContext;
+import net.demilich.metastone.game.spells.RandomChancesSpells.SynergyGameLogic;
 import net.demilich.metastone.game.targeting.CardLocation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SynergiesMaker {
@@ -35,6 +30,7 @@ public class SynergiesMaker {
     private List<Card> dummies;
 
     private List<Synergy> synergies = new ArrayList<>();
+
 
 
     public SynergiesMaker(DeckFormat format, HeroClass hero) {
@@ -56,8 +52,10 @@ public class SynergiesMaker {
     }
 
     public void start() {
-        Card card1 = CardCatalogue.getCardByName("Knife Juggler");
-        Card card2 = CardCatalogue.getCardByName("Murloc Tidehunter");
+        Card card1 = CardCatalogue.getCardByName("Dark Bargain");
+        Card card2 = CardCatalogue.getCardByName("Faceless Summoner");
+        Card card3 = CardCatalogue.getCardByName("Evolve");
+        Card card4 = CardCatalogue.getCardByName("Piloted Sky Golem");
 
 
         SynergyGameLogic logic = (SynergyGameLogic) context.getLogic();
@@ -80,9 +78,14 @@ public class SynergiesMaker {
 
         context.getLogic().receiveCard(player1.getId(), card1);
         context.getLogic().receiveCard(player1.getId(), card2);
+        context.getLogic().receiveCard(player1.getId(), card3);
+        context.getLogic().receiveCard(player1.getId(), card4);
 
-        logic.performGameAction(card1.getOwner(), card1.play());
-        logic.performGameAction(card2.getOwner(), card2.play());
+        playCard(card1);
+        playCard(card2);
+        playCard(card3);
+        playCard(card4);
+        logic.destroy(context.getPlayer1().getMinions().stream().filter(m -> m.getName().equals("Piloted Sky Golem")).findFirst().get());
 
         context.endTurn();
         context.startTurn(context.getActivePlayerId());
@@ -95,7 +98,7 @@ public class SynergiesMaker {
 
     private void fillWithDummies(Player player) {
         player.getHand().addCardsList(dummies.stream().filter(d -> d.getBaseManaCost() < 6).peek(d -> d.setLocation(CardLocation.HAND)).collect(Collectors.toList()));
-        new ArrayList<>(dummies).stream().filter(d -> d.getBaseManaCost()<5).forEach(d -> {context.getLogic().summon(player.getId(),((MinionCard)d).summon()); d.setLocation(CardLocation.GRAVEYARD);});
+        new ArrayList<>(dummies).stream().filter(d -> d.getBaseManaCost()<4).forEach(d -> {context.getLogic().summon(player.getId(),((MinionCard)d).summon()); d.setLocation(CardLocation.GRAVEYARD);});
     }
 
     private void setOwner(Player player) {
@@ -103,4 +106,17 @@ public class SynergiesMaker {
         player.getDeck().toList().forEach(c -> c.setOwner(player.getId()));
         player.getSetAsideZone().forEach(c -> c.setOwner(player.getId()));
     }
+
+    private void playCard(Card card){
+        SynergyGameLogic logic = context.getLogic();
+        Player player = context.getPlayer(card.getOwner());
+        player.setMana(10);
+        if(card.getLocation()==CardLocation.GRAVEYARD) {
+            card.setLocation(CardLocation.HAND);
+            player.getHand().add(card);
+            player.getGraveyard().remove(card);}
+        if(logic.canPlayCard(card.getOwner(),card.getCardReference())) logic.performGameAction(card.getOwner(), card.play());
+    }
+
+
 }

@@ -1,18 +1,20 @@
-package net.demilich.metastone.game.spells;
-
-import java.util.List;
+package net.demilich.metastone.game.spells.RandomChancesSpells;
 
 import net.demilich.metastone.game.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.RandomChancesSpells.SpellPoss;
-import net.demilich.metastone.game.spells.RandomChancesSpells.SynergyGameContext;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
-public abstract class Spell implements SpellPoss {
+import java.util.List;
+
+public abstract class SpellC {
+
+	protected Object possibility;
 
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		// no target specified, cast the spell once with target NULL
@@ -77,5 +79,11 @@ public abstract class Spell implements SpellPoss {
 	public String toString() {
 		return "[SPELL " + getClass().getSimpleName() + "]";
 	}
+
+    public void set(Object obj){
+        possibility = obj;
+    }
+
+    public  List<Object> getPossibilities(GameContext context, Player player, SpellDesc desc, Entity source){return null;};
 
 }

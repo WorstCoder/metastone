@@ -23,7 +23,7 @@ public class BattlecryAction extends GameAction {
 		return battlecry;
 	}
 
-	private final SpellDesc spell;
+	private SpellDesc spell;
 	private boolean resolvedLate = false;
 	private Condition condition;
 
@@ -83,6 +83,10 @@ public class BattlecryAction extends GameAction {
 
 	public SpellDesc getSpell() {
 		return spell;
+	}
+
+	public void setSpell(SpellDesc spell) {
+		this.spell = spell;
 	}
 
 	public boolean isResolvedLate() {

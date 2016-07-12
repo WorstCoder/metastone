@@ -4,24 +4,18 @@ import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
-import net.demilich.metastone.game.behaviour.GreedyOptimizeMove;
 import net.demilich.metastone.game.behaviour.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
-import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.RandomChancesSpells.SynergyGameContext;
+import net.demilich.metastone.game.spells.RandomChancesSpells.SynergyGameLogic;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class GameMaker {
 

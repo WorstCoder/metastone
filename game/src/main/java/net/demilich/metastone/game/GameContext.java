@@ -32,7 +32,7 @@ public class GameContext implements Cloneable, IDisposable {
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
 
-	private static final Logger logger = LoggerFactory.getLogger(GameContext.class);
+	protected static final Logger logger = LoggerFactory.getLogger(GameContext.class);
 
 	private final Player[] players = new Player[2];
 	private final GameLogic logic;

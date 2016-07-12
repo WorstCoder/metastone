@@ -34,11 +34,33 @@ public class SpellDesc extends Desc<SpellArg> {
 		return clone;
 	}
 
+	public void changeArg(SpellArg spellArg, Object value){
+		this.arguments.remove(spellArg);
+		this.arguments.put(spellArg,value);
+	}
+
+	public void putArg(SpellArg spellArg, Object value) {
+		arguments.put(spellArg, value);
+	}
+
+	public Map<SpellArg, Object> getArgs(){
+		return arguments;
+	}
+
 	@Override
 	public SpellDesc clone() {
 		SpellDesc clone = new SpellDesc(build(getSpellClass()));
 		for (SpellArg spellArg : arguments.keySet()) {
 			Object value = arguments.get(spellArg);
+			if(spellArg==SpellArg.SPELLS){
+				SpellDesc[] spellsArr = (SpellDesc[]) this.get(SpellArg.SPELLS);
+				SpellDesc[] newArr = new SpellDesc[spellsArr.length];
+				for(int i=0; i<spellsArr.length; i++){
+					newArr[i] = spellsArr[i].clone();
+				}
+				clone.arguments.put(spellArg, newArr);
+				continue;
+			}
 			if (value instanceof CustomCloneable) {
 				CustomCloneable cloneable = (CustomCloneable) value;
 				clone.arguments.put(spellArg, cloneable.clone());

@@ -22,7 +22,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class TargetLogic {
 
-	private static Logger logger = LoggerFactory.getLogger(TargetLogic.class);
+	protected static Logger logger = LoggerFactory.getLogger(TargetLogic.class);
 
 	private static List<Entity> singleTargetAsList(Entity target) {
 		ArrayList<Entity> list = new ArrayList<>(1);
@@ -131,7 +131,7 @@ public class TargetLogic {
 		return null;
 	}
 
-	private Entity findInEnvironment(GameContext context, EntityReference targetKey) {
+	protected Entity findInEnvironment(GameContext context, EntityReference targetKey) {
 		if (!context.getEventTargetStack().isEmpty() && targetKey == EntityReference.EVENT_TARGET) {
 			return context.resolveSingleTarget(context.getEventTargetStack().peek());
 		}
