@@ -46,7 +46,7 @@ public class SummonRandomMinionFilteredSpellC extends Spell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player, net.demilich.metastone.game.spells.desc.SpellDesc desc, Entity source){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player,SpellDesc desc, Entity source, List<Entity> targets){
         List<Object> minions = new ArrayList<>();
         EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
         CardCollection allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);

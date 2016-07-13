@@ -2,6 +2,8 @@ package net.demilich.metastone.game.spells.RandomChancesSpells;
 
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.MissilesSpell;
+import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -15,10 +17,10 @@ import java.util.List;
 
 public interface SpellPoss {
 
-    default List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source) {
+    default List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
         List<Object> poss = new ArrayList<>();
-        if (desc.contains(SpellArg.RANDOM_TARGET) && desc.contains(SpellArg.TARGET)) {
-            List<Entity> targets =  context.getLogic().getTargetLogic().resolveTargetKey(context, player, source, desc.getTarget());
+        if (desc.contains(SpellArg.RANDOM_TARGET) && desc.contains(SpellArg.TARGET) || desc.getSpellClass()== MissilesSpell.class) {
+            targets =  context.getLogic().getTargetLogic().resolveTargetKey(context, player, source, desc.getTarget());
             List<Entity> validTargets = SpellUtils.getValidTargets(context, player, targets, desc.getEntityFilter());
             return (List<Object>) (List<?>)validTargets;
         }
@@ -27,7 +29,10 @@ public interface SpellPoss {
             int min = ((RandomValueProvider) desc.get(SpellArg.VALUE)).getMin();
             int max = ((RandomValueProvider) desc.get(SpellArg.VALUE)).getMax();
             for (int i = min; i <= max; i++) {
-                poss.add(i);
+                SpellDesc newSpell = desc.clone();
+                newSpell.delArg(SpellArg.VALUE);
+                newSpell.putArg(SpellArg.VALUE,i);
+                poss.add(newSpell);
             }
             return poss;
         }

@@ -27,9 +27,7 @@ public class DestroyAllExceptOneSpellC extends DestroySpell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets){
 		return (List<Object>)(List<?>)context.getLogic().getTargetLogic().resolveTargetKey(context, player, source, desc.getTarget());
 	}
-
-
 }

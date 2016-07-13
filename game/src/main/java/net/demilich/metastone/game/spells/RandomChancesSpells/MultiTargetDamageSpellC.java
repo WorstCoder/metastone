@@ -37,7 +37,7 @@ public class MultiTargetDamageSpellC extends DamageSpell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targetsx){
 		List<Minion> validTargets = new ArrayList<>(context.getOpponent(player).getMinions());
 		List<List<Minion>> targets = new ArrayList<>();
 		for(int i=0;i<validTargets.size();i++){

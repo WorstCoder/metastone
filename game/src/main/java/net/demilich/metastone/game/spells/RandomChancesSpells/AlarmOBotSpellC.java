@@ -33,7 +33,7 @@ public class AlarmOBotSpellC extends ReturnMinionToHandSpell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets){
         return (List<Object>)(List<?>)player.getHand().toList();
     }
 

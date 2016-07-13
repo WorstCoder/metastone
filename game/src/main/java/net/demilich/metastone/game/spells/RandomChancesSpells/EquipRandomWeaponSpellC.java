@@ -37,7 +37,7 @@ public class EquipRandomWeaponSpellC extends Spell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player, net.demilich.metastone.game.spells.desc.SpellDesc desc, Entity source){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets){
 		return (List<Object>)(List<?>)CardCatalogue.query(context.getDeckFormat(), CardType.WEAPON).toList();
 	}
 }

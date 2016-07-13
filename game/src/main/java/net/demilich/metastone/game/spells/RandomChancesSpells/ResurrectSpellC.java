@@ -25,7 +25,7 @@ public class ResurrectSpellC extends Spell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player, net.demilich.metastone.game.spells.desc.SpellDesc desc, Entity source){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets){
 		List<Minion> deadMinions = new ArrayList<>();
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		List<Entity> graveyard = new ArrayList<Entity>();

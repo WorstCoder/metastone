@@ -51,7 +51,7 @@ public class PutRandomMinionOnBoardSpellC extends Spell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player,SpellDesc desc, Entity source){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player,SpellDesc desc, Entity source, List<Entity> targets){
 		CardLocation cardLocation = (CardLocation) desc.get(SpellArg.CARD_LOCATION);
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 

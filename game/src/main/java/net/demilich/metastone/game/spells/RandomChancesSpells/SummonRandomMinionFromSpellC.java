@@ -13,25 +13,25 @@ import java.util.List;
 
 public class SummonRandomMinionFromSpellC extends Spell {
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+    @Override
+    protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 
-		
-		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
-		MinionCard minionCard = (MinionCard)desc.get(SpellArg.POSSIBILITY);
-		context.getLogic().summon(player.getId(), minionCard.summon(), null, boardPosition, false);
-	}
 
-	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player, net.demilich.metastone.game.spells.desc.SpellDesc desc, Entity source){
-		Card fromCard = SpellUtils.getCard(context, desc);
-		CardCollection allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
-		CardCollection relevantMinions = new CardCollection();
-		for (Card card : allMinions) {
-			if (context.getLogic().getModifiedManaCost(player, fromCard) == card.getBaseManaCost()) {
-				relevantMinions.add(card);
-			}
-		}
-		return (List<Object>)(List<?>)relevantMinions.toList();
-	}
+        int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
+        MinionCard minionCard = (MinionCard) desc.get(SpellArg.POSSIBILITY);
+        context.getLogic().summon(player.getId(), minionCard.summon(), null, boardPosition, false);
+    }
+
+    @Override
+    public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
+        Card fromCard = SpellUtils.getCard(context, desc);
+        CardCollection allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);
+        CardCollection relevantMinions = new CardCollection();
+        for (Card card : allMinions) {
+            if (context.getLogic().getModifiedManaCost(player, fromCard) == card.getBaseManaCost()) {
+                relevantMinions.add(card);
+            }
+        }
+        return (List<Object>) (List<?>) relevantMinions.toList();
+    }
 }

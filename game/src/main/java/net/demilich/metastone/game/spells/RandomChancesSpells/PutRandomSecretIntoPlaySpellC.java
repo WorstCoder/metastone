@@ -44,7 +44,7 @@ public class PutRandomSecretIntoPlaySpellC extends Spell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player, net.demilich.metastone.game.spells.desc.SpellDesc desc, Entity source){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets){
 		CardCollection secretCards = findSecretCards(player.getDeck());
 		return (List<Object>)(List<?>) secretCards.toList();
 

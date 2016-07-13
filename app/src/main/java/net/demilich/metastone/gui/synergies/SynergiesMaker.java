@@ -52,9 +52,9 @@ public class SynergiesMaker {
     }
 
     public void start() {
-        Card card1 = CardCatalogue.getCardByName("Dark Bargain");
-        Card card2 = CardCatalogue.getCardByName("Faceless Summoner");
-        Card card3 = CardCatalogue.getCardByName("Evolve");
+        Card card1 = CardCatalogue.getCardByName("Flame Juggler");
+        Card card2 = CardCatalogue.getEveryCardByName("Boom Bot");
+        Card card3 = CardCatalogue.getCardByName("Tinkmaster Overspark");
         Card card4 = CardCatalogue.getCardByName("Piloted Sky Golem");
 
 
@@ -82,10 +82,11 @@ public class SynergiesMaker {
         context.getLogic().receiveCard(player1.getId(), card4);
 
         playCard(card1);
+
         playCard(card2);
+        logic.destroy(context.getPlayer1().getMinions().stream().filter(m -> m.getName().equals(card2.getName())).findFirst().get());
         playCard(card3);
         playCard(card4);
-        logic.destroy(context.getPlayer1().getMinions().stream().filter(m -> m.getName().equals("Piloted Sky Golem")).findFirst().get());
 
         context.endTurn();
         context.startTurn(context.getActivePlayerId());

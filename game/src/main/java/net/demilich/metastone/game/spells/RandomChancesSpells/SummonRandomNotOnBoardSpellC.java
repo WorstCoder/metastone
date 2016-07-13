@@ -33,7 +33,7 @@ public class SummonRandomNotOnBoardSpellC extends Spell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player, net.demilich.metastone.game.spells.desc.SpellDesc desc, Entity source){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets){
 		String[] minionCardsId = (String[]) desc.get(SpellArg.CARDS);
 		List<String> eligibleMinions = new ArrayList<String>();
 		for (String minion : minionCardsId) {

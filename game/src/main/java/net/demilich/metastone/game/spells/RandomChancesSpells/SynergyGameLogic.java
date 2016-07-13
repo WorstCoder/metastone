@@ -17,11 +17,11 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TargetAcquisitionEvent;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.custom.AlarmOBotSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.condition.RandomCondition;
 import net.demilich.metastone.game.spells.desc.valueprovider.RandomValueProvider;
 import net.demilich.metastone.game.targeting.CardLocation;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -98,7 +98,7 @@ public class SynergyGameLogic extends GameLogic {
         } else {
             SpellDesc battlecrySpellDesc = ((BattlecryAction) battlecryAction).getSpell();
 
-            List<SpellDesc> battlecrySpells = getPossibilities(battlecrySpellDesc, context, player, battlecrySpellDesc, actor);
+            List<SpellDesc> battlecrySpells = getPossibilities(battlecrySpellDesc, context, player, battlecrySpellDesc, actor, null);
             GameAction battlecryClone = battlecryAction.clone();
             ((BattlecryAction) battlecryClone).setSpell(battlecrySpells.get(0));
 
@@ -124,7 +124,7 @@ public class SynergyGameLogic extends GameLogic {
         for (SpellDesc deathrattleTemplate : actor.getDeathrattles()) {
             SpellDesc deathrattle = deathrattleTemplate.addArg(SpellArg.BOARD_POSITION_ABSOLUTE, boardPosition);
 
-            List<SpellDesc> possibleDeathrattles = getPossibilities(deathrattle, context, player, deathrattle, context.resolveSingleTarget(sourceReference));
+            List<SpellDesc> possibleDeathrattles = getPossibilities(deathrattle, context, player, deathrattle, context.resolveSingleTarget(sourceReference), null);
             deathrattle = possibleDeathrattles.get(0);
 
             castSpell(player.getId(), deathrattle, sourceReference, EntityReference.NONE, false);
@@ -184,15 +184,16 @@ public class SynergyGameLogic extends GameLogic {
 
             if (isRandom(spellDesc) && !spellDesc.contains(SpellArg.POSSIBILITY)) {
                 if (childSpell || source instanceof SpellCard) {
-                    List<SpellDesc> possibleSpells = getPossibilities(spellDesc, context, player, spellDesc, source);
+                    List<SpellDesc> possibleSpells = getPossibilities(spellDesc, context, player, spellDesc, source, targets);
                     spellDesc = possibleSpells.get(0);
 
                     spell = spellFactory.getSpell(possibleSpells.get(0));
                 }
             }
-            if(targets!=null && spellDesc.contains(SpellArg.POSSIBILITY)){
+            if (targets != null && spellDesc.contains(SpellArg.POSSIBILITY)) {
                 targets.clear();
-                targets.add((Entity) spellDesc.get(SpellArg.POSSIBILITY));}
+                targets.add((Entity) spellDesc.get(SpellArg.POSSIBILITY));
+            }
 
             spell.cast(context, player, spellDesc, source, targets);
         } catch (Exception e) {
@@ -210,18 +211,28 @@ public class SynergyGameLogic extends GameLogic {
     }
 
 
-    protected List<SpellDesc> getPossibilities(SpellDesc spell, GameContext context, Player player, SpellDesc desc, Entity source) {
+    protected List<SpellDesc> getPossibilities(SpellDesc spell, GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
         //List<SpellDesc> spells = getAllSpells(root,null,null);
         //List<List<SpellDesc>> possibleSpells = new ArrayList<>();
         List<SpellDesc> possibleSpells = new ArrayList<>();
         if (spell.getSpellClass() == MetaSpell.class) return metaPossibilities(spell, context, player, desc, source);
         //for(SpellDesc spell : spells) {
+        possibleSpells.add(spell);
         if (isRandom(spell)) {
+            possibleSpells.clear();
             //List<SpellDesc> tempSpellList = new ArrayList<>();
             Spell unrandomizedSpell = getUnrandomizedSpell(spell);
-            List<Object> possibilities = unrandomizedSpell.getPossibilities((SynergyGameContext) context, player, spell, source);
+            List<Object> possibilities = unrandomizedSpell.getPossibilities((SynergyGameContext) context, player, spell, source, targets);
+            if (possibilities == null) {
+                SpellDesc newSpell = spell.clone();
+                newSpell.changeArg(SpellArg.CLASS, unrandomizedSpell.getClass());
+                possibleSpells.add(newSpell);
+                return possibleSpells;
+            }
+            if(possibilities.get(0).getClass() == SpellDesc.class) return (List<SpellDesc>)(List<?>) possibilities;
             for (Object possibility : possibilities) {
                 SpellDesc newSpell = spell.addArg(SpellArg.POSSIBILITY, possibility);
+                if (newSpell.contains(SpellArg.TARGET)) newSpell.delArg(SpellArg.TARGET);
                 newSpell.changeArg(SpellArg.CLASS, unrandomizedSpell.getClass());
                 //((SpellC)newSpell.get(SpellArg.CLASS)).set(possibility);
                 possibleSpells.add(newSpell);
@@ -262,7 +273,7 @@ public class SynergyGameLogic extends GameLogic {
             //If spell is random get possibilities and unrandomized spell
             if (isRandom(spell)) {
                 Spell unrandomizedSpell = getUnrandomizedSpell(spell);
-                List<SpellDesc> innerPossSpells = getPossibilities(spell, context, player, desc, source);
+                List<SpellDesc> innerPossSpells = getPossibilities(spell, context, player, desc, source, null);
                 //if(!orderMatter){innerPossSpells=innerPossSpells.subList(order++,innerPossSpells.size());}
                 //Loop through possibilities
                 for (SpellDesc innerPossSpell : innerPossSpells) {
@@ -408,9 +419,17 @@ public class SynergyGameLogic extends GameLogic {
         if (spellClass == DestroyAllExceptOneSpell.class) {
             return new DestroyAllExceptOneSpellC();
         }
-        //if (spellClass == DestroySpell.class) {
-        //    return new DestroySpellC();
-        //}
+        if (spellClass == RandomlyCastSpell.class) {
+            return new RandomlyCastSpellC();
+        }
+        if (spellClass == EitherOrSpell.class) {
+            return new EitherOrSpellC();
+        }
+
+        if (spellClass == MissilesSpell.class) {
+            return new MissilesSpellC();
+        }
+
         return spellFactory.getSpell(spell);
     }
 
@@ -419,10 +438,11 @@ public class SynergyGameLogic extends GameLogic {
         //for (SpellDesc spell : cardSpells){
         Class spellClass = spell.getSpellClass();
 
-        if (spell.contains(SpellArg.RANDOM_TARGET) && spell.contains(SpellArg.TARGET)) return true;
+        if (spell.contains(SpellArg.RANDOM_TARGET) && spell.contains(SpellArg.TARGET) && spell.getSpellClass() != MissilesSpellC.class) return true;
 
         if (spell.contains(SpellArg.VALUE) && spell.get(SpellArg.VALUE).getClass() == RandomValueProvider.class
-                || spell.contains(SpellArg.ATTACK_BONUS) && spell.get(SpellArg.ATTACK_BONUS).getClass() == RandomValueProvider.class) return true;
+                || spell.contains(SpellArg.ATTACK_BONUS) && spell.get(SpellArg.ATTACK_BONUS).getClass() == RandomValueProvider.class)
+            return true;
 
 
         if (spellClass == AlarmOBotSpell.class) {
@@ -461,17 +481,24 @@ public class SynergyGameLogic extends GameLogic {
         if (spellClass == DestroyAllExceptOneSpell.class) {
             return true;
         }
-        //if (spellClass == DestroySpell.class) {
-        //    return true;
-        //}
+        if (spellClass == RandomlyCastSpell.class) {
+            return true;
+        }
         if (spellClass == MindControlSpell.class) {
             return true;
         }
         if (spellClass == MetaSpell.class) {
             return true;
         }
-            return false;
+        if (spellClass == EitherOrSpell.class && spell.get(SpellArg.CONDITION).getClass() == RandomCondition.class) {
+            return true;
         }
+
+        if (spellClass == MissilesSpell.class && (Integer)spell.get(SpellArg.HOW_MANY)==1 && (Integer)spell.get(SpellArg.VALUE)!=1) {
+            return true;
+        }
+        return false;
+    }
 
 
     public SynergyTargetLogic getTargetLogic() {

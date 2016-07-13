@@ -40,6 +40,7 @@ public class GetRandomSpells{
     private Map<String,List<Card>> list_spells = new HashMap<>();
     private List<Card> listCards = new ArrayList<>();
     private String path = UserHomeMetastone.getPath() + "/synergies";
+    private List<Card> allCards = CardCatalogue.getAll().toList();
 
     private String url="http://hearthstone.gamepedia.com/Random_effect/Wild_format";
 

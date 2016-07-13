@@ -34,6 +34,8 @@ public class SpellDesc extends Desc<SpellArg> {
 		return clone;
 	}
 
+
+
 	public void changeArg(SpellArg spellArg, Object value){
 		this.arguments.remove(spellArg);
 		this.arguments.put(spellArg,value);
@@ -41,6 +43,10 @@ public class SpellDesc extends Desc<SpellArg> {
 
 	public void putArg(SpellArg spellArg, Object value) {
 		arguments.put(spellArg, value);
+	}
+
+	public void delArg(SpellArg spellArg) {
+		arguments.remove(spellArg);
 	}
 
 	public Map<SpellArg, Object> getArgs(){
