@@ -1,16 +1,13 @@
-package net.demilich.metastone.game.spells.RandomChancesSpells;
+package net.demilich.metastone.game.synergy.spells;
 
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.MissilesSpell;
-import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.RandomValueProvider;
-import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
-import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
-import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.synergy.SynergyGameContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +23,23 @@ public interface SpellPoss {
         }
         if (desc.contains(SpellArg.VALUE) && desc.get(SpellArg.VALUE).getClass() == RandomValueProvider.class
                 || desc.contains(SpellArg.ATTACK_BONUS) && desc.get(SpellArg.ATTACK_BONUS).getClass() == RandomValueProvider.class) {
-            int min = ((RandomValueProvider) desc.get(SpellArg.VALUE)).getMin();
-            int max = ((RandomValueProvider) desc.get(SpellArg.VALUE)).getMax();
+
+            int min;
+            int max;
+            if(desc.contains(SpellArg.ATTACK_BONUS)){
+                min = ((RandomValueProvider) desc.get(SpellArg.ATTACK_BONUS)).getMin();
+                max = ((RandomValueProvider) desc.get(SpellArg.ATTACK_BONUS)).getMax();
+                 }else{
+            min = ((RandomValueProvider) desc.get(SpellArg.VALUE)).getMin();
+            max = ((RandomValueProvider) desc.get(SpellArg.VALUE)).getMax();}
             for (int i = min; i <= max; i++) {
                 SpellDesc newSpell = desc.clone();
+                if(desc.contains(SpellArg.ATTACK_BONUS)){
+                    newSpell.delArg(SpellArg.ATTACK_BONUS);
+                    newSpell.putArg(SpellArg.ATTACK_BONUS,i);
+                }else{
                 newSpell.delArg(SpellArg.VALUE);
-                newSpell.putArg(SpellArg.VALUE,i);
+                newSpell.putArg(SpellArg.VALUE,i);}
                 poss.add(newSpell);
             }
             return poss;

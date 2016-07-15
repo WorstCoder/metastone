@@ -1,4 +1,4 @@
-package net.demilich.metastone.game.spells.RandomChancesSpells;
+package net.demilich.metastone.game.synergy.spells;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -8,8 +8,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.synergy.SynergyGameContext;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +32,7 @@ public class SummonRandomSpellC extends Spell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player,SpellDesc desc, Entity source, List<Entity> targets){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets){
 		return (List<Object>)(List<?>) new ArrayList<String>(Arrays.asList((String[]) desc.get(SpellArg.CARDS)));
 	}
 

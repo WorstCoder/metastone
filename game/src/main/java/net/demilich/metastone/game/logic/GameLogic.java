@@ -115,13 +115,13 @@ public class GameLogic implements Cloneable {
 
 	// DEBUG
 	private final int MAX_HISTORY_ENTRIES = 100;
-	private Queue<String> debugHistory = new LinkedList<>();
+	protected Queue<String> debugHistory = new LinkedList<>();
 
 	public GameLogic() {
 		idFactory = new IdFactory();
 	}
 
-	private GameLogic(IdFactory idFactory) {
+	protected GameLogic(IdFactory idFactory) {
 		this.idFactory = idFactory;
 	}
 

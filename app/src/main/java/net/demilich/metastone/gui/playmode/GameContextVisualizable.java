@@ -23,7 +23,7 @@ public class GameContextVisualizable extends GameContext {
 		super(player1, player2, logic, deckFormat);
 	}
 
-	protected boolean acceptAction(GameAction nextAction) {
+	public boolean acceptAction(GameAction nextAction) {
 		if (!ignoreEvents()) {
 			return true;
 		}

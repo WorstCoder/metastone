@@ -1,11 +1,12 @@
-package net.demilich.metastone.game.spells.RandomChancesSpells;
+package net.demilich.metastone.game.synergy;
 
+import net.demilich.metastone.game.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.TurnState;
+import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.trigger.IGameEventListener;
 import net.demilich.metastone.game.spells.trigger.TriggerLayer;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -83,4 +84,29 @@ public class SynergyGameContext extends GameContext {
         return logic;
     }
 
+    @Override
+    public SynergyGameContext clone() {
+        SynergyGameLogic logicClone = getLogic().clone();
+        Player player1Clone = getPlayer1().clone();
+        // player1Clone.getDeckName().shuffle();
+        Player player2Clone = getPlayer2().clone();
+        // player2Clone.getDeckName().shuffle();
+        SynergyGameContext clone = new SynergyGameContext(player1Clone, player2Clone, logicClone, deckFormat);
+        clone.triggerManager = triggerManager.clone();
+        clone.activePlayer = activePlayer;
+        clone.turn = turn;
+        clone.actionsThisTurn = actionsThisTurn;
+        clone.result = result;
+        clone.turnState = turnState;
+        clone.winner = logicClone.getWinner(player1Clone, player2Clone);
+        clone.cardCostModifiers.clear();
+        for (CardCostModifier cardCostModifier : cardCostModifiers) {
+            clone.cardCostModifiers.add(cardCostModifier.clone());
+        }
+        for (Environment key : getEnvironment().keySet()) {
+            clone.getEnvironment().put(key, getEnvironment().get(key));
+        }
+        clone.getLogic().setLoggingEnabled(false);
+        return clone;
+    }
 }

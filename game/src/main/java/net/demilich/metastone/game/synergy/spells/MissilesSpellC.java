@@ -1,19 +1,15 @@
-package net.demilich.metastone.game.spells.RandomChancesSpells;
+package net.demilich.metastone.game.synergy.spells;
 
-import net.demilich.metastone.game.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.DamageSpell;
-import net.demilich.metastone.game.spells.MissilesSpell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.RandomValueProvider;
+import net.demilich.metastone.game.synergy.SynergyGameContext;
 
 import java.util.ArrayList;
 import java.util.List;

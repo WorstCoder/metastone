@@ -1,4 +1,4 @@
-package net.demilich.metastone.game.spells.RandomChancesSpells;
+package net.demilich.metastone.game.synergy.spells;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -9,6 +9,7 @@ import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.synergy.SynergyGameContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class SummonRandomMinionFilteredSpellC extends Spell {
 	}
 
 	@Override
-	public List<Object> getPossibilities(SynergyGameContext context, Player player,SpellDesc desc, Entity source, List<Entity> targets){
+	public List<Object> getPossibilities(SynergyGameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets){
         List<Object> minions = new ArrayList<>();
         EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
         CardCollection allMinions = CardCatalogue.query(context.getDeckFormat(), CardType.MINION);

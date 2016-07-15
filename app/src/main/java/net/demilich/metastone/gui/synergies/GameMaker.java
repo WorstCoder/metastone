@@ -11,8 +11,8 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
-import net.demilich.metastone.game.spells.RandomChancesSpells.SynergyGameContext;
-import net.demilich.metastone.game.spells.RandomChancesSpells.SynergyGameLogic;
+import net.demilich.metastone.game.synergy.SynergyGameContext;
+import net.demilich.metastone.game.synergy.SynergyGameLogic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class GameMaker {
 
     private HeroClass enemyClass;
 
-    private GameContext game;
+    private SynergyGameContext game;
 
     private List<Card> dummies = new ArrayList<>();
 
@@ -61,6 +61,7 @@ public class GameMaker {
             dummyDesc.baseManaCost = i;
             dummyDesc.name="Dummy " + i;
             dummyDesc.type = CardType.MINION;
+            dummyDesc.id = "dummy_" + i;
             //if(j<8 && j!=2) {dummyDesc.race=Race.values()[j++];
             //dummyDesc.name="Dummy " + i +" - " + dummyDesc.race.toString();} else j++;
             dummies.add(new MinionCard(dummyDesc));

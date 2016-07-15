@@ -1,4 +1,4 @@
-package net.demilich.metastone.game.spells.RandomChancesSpells;
+package net.demilich.metastone.game.synergy.spells;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -11,6 +11,7 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.synergy.SynergyGameContext;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;

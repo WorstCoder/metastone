@@ -1,4 +1,4 @@
-package net.demilich.metastone.game.spells.RandomChancesSpells;
+package net.demilich.metastone.game.synergy;
 
 
 import net.demilich.metastone.game.GameContext;
@@ -7,7 +7,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.TargetLogic;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 public class SynergyTargetLogic extends TargetLogic {
 

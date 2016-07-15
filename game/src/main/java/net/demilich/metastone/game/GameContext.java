@@ -40,11 +40,11 @@ public class GameContext implements Cloneable, IDisposable {
 	private final TargetLogic targetLogic = new TargetLogic();
 	private TriggerManager triggerManager = new TriggerManager();
 	private final HashMap<Environment, Object> environment = new HashMap<>();
-	private final List<CardCostModifier> cardCostModifiers = new ArrayList<>();
+	protected final List<CardCostModifier> cardCostModifiers = new ArrayList<>();
 
 	protected int activePlayer = -1;
-	private Player winner;
-	private MatchResult result;
+	protected Player winner;
+	protected MatchResult result;
 	protected TurnState turnState = TurnState.TURN_ENDED;
 
 	protected int turn;
@@ -62,7 +62,7 @@ public class GameContext implements Cloneable, IDisposable {
 		this.logic.setContext(this);
 	}
 
-	protected boolean acceptAction(GameAction nextAction) {
+	public boolean acceptAction(GameAction nextAction) {
 		return true;
 	}
 
