@@ -13,6 +13,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.synergy.SynergyGameContext;
 import net.demilich.metastone.game.synergy.SynergyGameLogic;
+import net.demilich.metastone.game.synergy.behaviour.ModGameStateValueBehaviour;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +81,7 @@ public class GameMaker {
     }
 
     private void SetupPlayers(){
-        playerConfig1.setBehaviour(new GameStateValueBehaviour());
+        playerConfig1.setBehaviour(new ModGameStateValueBehaviour());
         playerConfig2.setBehaviour(new DoNothingBehaviour());
         playerConfig1.setDeck(DummyDeck(heroClass));
         playerConfig2.setDeck(DummyDeck(enemyClass));

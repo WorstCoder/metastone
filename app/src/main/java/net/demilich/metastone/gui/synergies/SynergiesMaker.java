@@ -9,6 +9,7 @@ import net.demilich.metastone.game.cards.CardCollection;
 import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.synergy.Averager;
 import net.demilich.metastone.game.synergy.SynergyGameContext;
 import net.demilich.metastone.game.synergy.SynergyGameLogic;
 import net.demilich.metastone.game.targeting.CardLocation;
@@ -16,6 +17,8 @@ import net.demilich.metastone.game.targeting.CardLocation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static net.demilich.metastone.game.logic.GameLogic.logger;
 
 public class SynergiesMaker {
 
@@ -53,50 +56,13 @@ public class SynergiesMaker {
     }
 
     public void start() {
-        playAll();
-
-        Card card1 = CardCatalogue.getCardByName("Crackle");
-        Card card2 = CardCatalogue.getEveryCardByName("Boom Bot");
-        Card card3 = CardCatalogue.getCardByName("Tinkmaster Overspark");
-        Card card4 = CardCatalogue.getCardByName("Piloted Sky Golem");
-
-
-        SynergyGameLogic logic = (SynergyGameLogic) context.getLogic();
-        Player player1 = context.getPlayer1();
-        Player player2 = context.getPlayer2();
-
-        fillWithDummies(context,player2);
-
-
-        logic.init(player1.getId());
-        logic.init(player2.getId());
-
-        setOwner(context,player2);
-
-        player1.setMana(10);
-        player1.setMaxMana(10);
-
-        context.setActivePlayer(player1);
-        context.startTurn(context.getActivePlayerId());
-
-        context.getLogic().receiveCard(player1.getId(), card1);
-        context.getLogic().receiveCard(player1.getId(), card2);
-        context.getLogic().receiveCard(player1.getId(), card3);
-        context.getLogic().receiveCard(player1.getId(), card4);
-
-        playCard(card1, context);
-
-        playCard(card2, context);
-        logic.destroy(context.getPlayer1().getMinions().stream().filter(m -> m.getName().equals(card2.getName())).findFirst().get());
-        playCard(card3, context);
-        playCard(card4, context);
-
-        context.endTurn();
-        context.startTurn(context.getActivePlayerId());
-        context.playTurn();
-        context.endTurn();
-
-        System.out.print(context.toString());
+        //playAll();
+        List<SynergyGameContext> contexts = new ArrayList<>();
+        for(int i=0; i<100; i++){
+            contexts.add(playOne());
+            logger.info("Game number: "+i);
+        }
+        SynergyGameContext averaged = Averager.average(contexts);
 
     }
 
@@ -134,23 +100,74 @@ public class SynergiesMaker {
                 }
             }
 
-            //GameAction nextAction = context.getActivePlayer().getBehaviour().requestAction(context, context.getActivePlayer(), validCardActions);
+            //GameAction nextAction = contextClone.getActivePlayer().getBehaviour().requestAction(contextClone, contextClone.getActivePlayer(), validCardActions);
 
-            /*while (!context.acceptAction(nextAction)) {
-                nextAction = context.getActivePlayer().getBehaviour().requestAction(context, context.getActivePlayer(), validCardActions);
+            /*while (!contextClone.acceptAction(nextAction)) {
+                nextAction = contextClone.getActivePlayer().getBehaviour().requestAction(contextClone, contextClone.getActivePlayer(), validCardActions);
             }*/
 
             logic.performGameAction(card.getOwner(), validCardActions.get(0));
         }
     }
 
+    private SynergyGameContext playOne(){
+
+        SynergyGameContext contextClone = context.clone();
+
+        Card card1 = CardCatalogue.getCardByName("Knife Juggler");
+        Card card2 = CardCatalogue.getEveryCardByName("Stampeding Kodo");
+        Card card3 = CardCatalogue.getCardByName("Flame Juggler");
+        Card card4 = CardCatalogue.getCardByName("Piloted Sky Golem");
+
+
+        SynergyGameLogic logic = (SynergyGameLogic) contextClone.getLogic();
+        Player player1 = contextClone.getPlayer1();
+        Player player2 = contextClone.getPlayer2();
+
+        fillWithDummies(contextClone,player2);
+        setOwner(contextClone,player2);
+
+        //fillWithDummies(contextClone,player1);
+        //setOwner(contextClone,player1);
+
+
+        logic.init(player1.getId());
+        logic.init(player2.getId());
+
+
+        player1.setMana(10);
+        player1.setMaxMana(10);
+
+        contextClone.setActivePlayer(player1);
+        contextClone.startTurn(contextClone.getActivePlayerId());
+
+        logic.receiveCard(player1.getId(), card1);
+        logic.receiveCard(player1.getId(), card2);
+        logic.receiveCard(player1.getId(), card3);
+        logic.receiveCard(player1.getId(), card4);
+
+        playCard(card1, contextClone);
+
+        playCard(card2, contextClone);
+        playCard(card3, contextClone);
+        playCard(card4, contextClone);
+        logic.destroy(contextClone.getPlayer1().getMinions().stream().filter(m -> m.getName().equals(card4.getName())).findFirst().get());
+
+        //contextClone.endTurn();
+        //contextClone.startTurn(contextClone.getActivePlayerId());
+        //contextClone.playTurn();
+        //contextClone.endTurn();
+
+        return contextClone;
+    }
+
     private void playAll() {
         List<Card> cards = GetRandomSpells.getListCards();
         for (Card card : cards) {
 
-            Card card1 = CardCatalogue.getCardByName("Twisting Nether");
+            Card card1 = CardCatalogue.getCardByName("Animal Companion");
 
-            SynergyGameContext contextClone = context.clone();
+            SynergyGameContext contextClone = this.context.clone();
 
             SynergyGameLogic logicClone = (SynergyGameLogic) contextClone.getLogic();
 
@@ -181,6 +198,8 @@ public class SynergiesMaker {
             contextClone.startTurn(contextClone.getActivePlayerId());
             contextClone.playTurn();
             playCard(card1, contextClone);
+            if(card instanceof MinionCard)
+            logicClone.destroy(contextClone.getPlayer1().getMinions().stream().filter(m -> m.getName().equals(card.getName())).findFirst().get());
             //List<Entity> minions = (List<Entity>)(List<?>) contextClone.getPlayer1().getMinions();
             //Entity[] minion = (Entity[]) minions.toArray();
             //contextClone.getLogic().destroy(minion);

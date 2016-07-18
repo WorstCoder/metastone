@@ -21,7 +21,9 @@ public abstract class GameAction implements Cloneable {
 	@Override
 	public GameAction clone() {
 		try {
-			return (GameAction) super.clone();
+			GameAction clone = (GameAction)super.clone();
+			clone.setTargetKey(targetKey);
+			return clone;
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}

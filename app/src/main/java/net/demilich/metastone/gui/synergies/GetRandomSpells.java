@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.ActorCardDesc;
 import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
+import net.demilich.metastone.game.cards.desc.MinionCardDesc;
 import net.demilich.metastone.game.cards.desc.SpellCardDesc;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.synergy.spells.MissilesSpellC;
@@ -91,9 +92,11 @@ public class GetRandomSpells {
         list_spells.put("VALUE", new ArrayList<>());
         list_spells.put("SPELL", new ArrayList<>());
         list_spells.put("FILTER", new ArrayList<>());
+        list_spells.put("TRIGGERS", new ArrayList<>());
         for (String cardName : list_cards) {
             Card c = CardCatalogue.getEveryCardByName(cardName);
             getListCards().add(c);
+            if(c.getCardType() == CardType.MINION && ((MinionCardDesc)c.desc).trigger!=null) list_spells.get("TRIGGERS").add(c);
             if (c.getCardType() == CardType.MINION) {
                 ActorCardDesc desc = (ActorCardDesc) c.desc;
                 if (desc.battlecry != null) {

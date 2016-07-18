@@ -69,6 +69,7 @@ public enum Attribute {
 	SPELLS_COST_HEALTH,
 	IMMUNE_HERO,
 	TAKE_DOUBLE_DAMAGE,
+	ALIVE,
 
 	// AI flags
 	MARKED_FOR_DEATH, 

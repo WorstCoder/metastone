@@ -56,6 +56,7 @@ public class BattlecryAction extends GameAction {
 	@Override
 	public BattlecryAction clone() {
 		BattlecryAction clone = BattlecryAction.createBattlecry(getSpell(), getTargetRequirement());
+		clone.setTargetKey(getTargetKey());
 		clone.setActionSuffix(getActionSuffix());
 		clone.setResolvedLate(isResolvedLate());
 		clone.setSource(getSource());

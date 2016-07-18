@@ -1011,7 +1011,7 @@ public class GameLogic implements Cloneable {
 		return joustEvent;
 	}
 
-	private void log(String message) {
+	protected void log(String message) {
 		logToDebugHistory(message);
 		if (isLoggingEnabled() && logger.isDebugEnabled()) {
 			logger.debug(message);
@@ -1032,7 +1032,7 @@ public class GameLogic implements Cloneable {
 		}
 	}
 
-	private void log(String message, Object param1, Object param2, Object param3) {
+	protected void log(String message, Object param1, Object param2, Object param3) {
 		logToDebugHistory(message, param1, param2, param3);
 		if (isLoggingEnabled() && logger.isDebugEnabled()) {
 			logger.debug(message, param1, param2, param3);

@@ -2,207 +2,52 @@ package net.demilich.metastone.gui.synergies;
 
 public class Synergy {
 
-    private int totalCost;
+    public int totalCost;
 
-    private int manaGained;
-
-
-    private int damage;
-
-    private int randomDamage;
-
-    private int heal;
+    public int manaGained;
 
 
-    private int heroDamageTaken;
+    public int damage;
 
-    private int armorGained;
+    public int randomDamage;
 
-    private int draw;
-
-    private int enemyMinionsDestroyed;
-
-    private int minionsSummoned;
-
-    private int friendlyMinionsDestroyed;
+    public int heal;
 
 
-    private int totalMinionsAttack;
+    public int heroDamageTaken;
 
-    private int totalMinionsHealth;
+    public int armorGained;
 
-    private int buffedAttack;
+    public int draw;
 
-    private int buffedHealth;
+    public int enemyMinionsDestroyed;
 
-    private int tempBuffedAttack;
+    public int minionsSummoned;
 
-    private int tempBuffedHealth;
+    public int friendlyMinionsDestroyed;
 
 
-    private int buffedSpellDamage;
+    public int totalMinionsAttack;
 
-    private int cardsPlayed;
+    public int totalMinionsHealth;
 
-    private float chances;
+    public int buffedAttack;
 
-    public int getTotalCost() {
-        return totalCost;
-    }
+    public int buffedHealth;
 
-    public void setTotalCost(int totalCost) {
-        this.totalCost = totalCost;
-    }
+    public int tempBuffedAttack;
 
-    public int getDamage() {
-        return damage;
-    }
+    public int tempBuffedHealth;
 
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
 
-    public int getRandomDamage() {
-        return randomDamage;
-    }
+    public int buffedSpellDamage;
 
-    public void setRandomDamage(int randomDamage) {
-        this.randomDamage = randomDamage;
-    }
+    public int cardsPlayed;
 
-    public int getHeal() {
-        return heal;
-    }
+    public double chances;
 
-    public void setHeal(int heal) {
-        this.heal = heal;
-    }
+    public State turnState;
 
-    public int getDraw() {
-        return draw;
-    }
+    public double score;
 
-    public void setDraw(int draw) {
-        this.draw = draw;
-    }
-
-    public int getEnemyMinionsDestroyed() {
-        return enemyMinionsDestroyed;
-    }
-
-    public void setEnemyMinionsDestroyed(int enemyMinionsDestroyed) {
-        this.enemyMinionsDestroyed = enemyMinionsDestroyed;
-    }
-
-    public int getMinionsSummoned() {
-        return minionsSummoned;
-    }
-
-    public void setMinionsSummoned(int minionsSummoned) {
-        this.minionsSummoned = minionsSummoned;
-    }
-
-    public int getTotalMinionsAttack() {
-        return totalMinionsAttack;
-    }
-
-    public void setTotalMinionsAttack(int totalMinionsAttack) {
-        this.totalMinionsAttack = totalMinionsAttack;
-    }
-
-    public int getTotalMinionsHealth() {
-        return totalMinionsHealth;
-    }
-
-    public void setTotalMinionsHealth(int totalMinionsHealth) {
-        this.totalMinionsHealth = totalMinionsHealth;
-    }
-
-    public int getBuffedAttack() {
-        return buffedAttack;
-    }
-
-    public void setBuffedAttack(int buffedAttack) {
-        this.buffedAttack = buffedAttack;
-    }
-
-    public int getBuffedHealth() {
-        return buffedHealth;
-    }
-
-    public void setBuffedHealth(int buffedHealth) {
-        this.buffedHealth = buffedHealth;
-    }
-
-    public int getTempBuffedAttack() {
-        return tempBuffedAttack;
-    }
-
-    public void setTempBuffedAttack(int tempBuffedAttack) {
-        this.tempBuffedAttack = tempBuffedAttack;
-    }
-
-    public int getTempBuffedHealth() {
-        return tempBuffedHealth;
-    }
-
-    public void setTempBuffedHealth(int tempBuffedHealth) {
-        this.tempBuffedHealth = tempBuffedHealth;
-    }
-
-    public int getBuffedSpellDamage() {
-        return buffedSpellDamage;
-    }
-
-    public void setBuffedSpellDamage(int buffedSpellDamage) {
-        this.buffedSpellDamage = buffedSpellDamage;
-    }
-
-    public int getCardsPlayed() {
-        return cardsPlayed;
-    }
-
-    public void setCardsPlayed(int cardsPlayed) {
-        this.cardsPlayed = cardsPlayed;
-    }
-
-    public int getArmorGained() {
-        return armorGained;
-    }
-
-    public void setArmorGained(int armorGained) {
-        this.armorGained = armorGained;
-    }
-
-    public float getChances() {
-        return chances;
-    }
-
-    public void setChances(float chances) {
-        this.chances = chances;
-    }
-
-    public int getHeroDamageTaken() {
-        return heroDamageTaken;
-    }
-
-    public void setHeroDamageTaken(int heroDamageTaken) {
-        this.heroDamageTaken = heroDamageTaken;
-    }
-
-    public int getManaGained() {
-        return manaGained;
-    }
-
-    public void setManaGained(int manaGained) {
-        this.manaGained = manaGained;
-    }
-
-    public int getFriendlyMinionsDestroyed() {
-        return friendlyMinionsDestroyed;
-    }
-
-    public void setFriendlyMinionsDestroyed(int friendlyMinionsDestroyed) {
-        this.friendlyMinionsDestroyed = friendlyMinionsDestroyed;
-    }
 }
